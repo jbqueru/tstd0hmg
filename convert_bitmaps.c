@@ -32,9 +32,7 @@ unsigned char pi1[32034];
 
 unsigned char rawpixels[320][200];
 
-unsigned char logo[120 * 112];
-
-unsigned char menubg[160 * 200];
+unsigned char logo[320 / 2 * 133];
 
 void main() {
 	FILE* inputfile;
@@ -81,13 +79,13 @@ void main() {
 		exit(1);
 	}
 
-	for (int i = 0; i < 120 * 112; i++) {
+	for (int i = 0; i < 320 / 2 * 133; i++) {
 		logo[i] = 0;
 	}
 
-	for (int y = 0; y < 112; y++) {
-		for (int x = 0; x < 240; x++) {
-			unsigned int c = rawpixels[x + 41][y + 38];
+	for (int y = 0; y < 133; y++) {
+		for (int x = 0; x < 320; x++) {
+			unsigned int c = rawpixels[x + 0][y + 33];
 			if (c & 1) {
 				logo[(x / 16) * 2 + (x & 8) / 8 + y * 120 + 0] |= (0x80 >> (x & 7));
 			}
