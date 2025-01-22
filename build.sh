@@ -28,9 +28,9 @@ mkdir -p out/bin || exit $?
 mkdir -p out/inc || exit $?
 mkdir -p out/tos || exit $?
 
-#echo '(*) convert bitmaps'
-#cc convert_bitmaps.c -o out/bin/convert_bitmaps || exit $?
-#out/bin/convert_bitmaps || exit $?
+echo '(*) convert bitmaps'
+cc convert_bitmaps.c -o out/bin/convert_bitmaps || exit $?
+out/bin/convert_bitmaps || exit $?
 
 echo '(*) assemble code'
 rmac -s -p -4 main.s -o out/tos/TSTD0HMG.PRG || exit $?
