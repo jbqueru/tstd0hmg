@@ -71,14 +71,14 @@
 ; ###############################
 ; ###############################
 
-	.68000				; The best. Maybe. At least, the best for Atari ST.
-	.include	"defines.s"	; ST hardware/OS defines
-	.include	"params.s"	; Parameters for the demo
+  .68000		; The best. Maybe. At least, the best for Atari ST.
+  .include "defines.s"	; ST hardware/OS defines
+  .include "params.s"	; Parameters for the demo
 
-	.bss
-_MainBssStart:				; Beginning of the BSS - clear starting from that address
+  .bss
+_MainBssStart:		; Beginning of the BSS - clear from that address
 
-	.text
+  .text
 
 ; ########################################
 ; ########################################
@@ -95,16 +95,16 @@ MainUser:
 ; **********************************
 ; ** Invoke supervisor subroutine **
 ; **********************************
-	pea.l	.MainSuper.l
-	move.w	#XBIOS_SUPEXEC, -(sp)
-	trap	#XBIOS_TRAP
-	addq.l	#6, sp
+  pea.l .MainSuper.l
+  move.w #XBIOS_SUPEXEC, -(sp)
+  trap #XBIOS_TRAP
+  addq.l #6, sp
 
 ; *********************
 ; ** Exit back to OS **
 ; *********************
-	move.w	#GEMDOS_TERM0, -(sp)
-	trap	#GEMDOS_TRAP
+  move.w #GEMDOS_TERM0, -(sp)
+  trap #GEMDOS_TRAP
 
 ; ############################################
 ; ############################################
@@ -116,12 +116,12 @@ MainUser:
 
 .MainSuper:
 
-;	bsr.s	MainBSSClear
+; bsr.s MainBSSClear
 
 ; ***********************
 ; ** Back to user mode **
 ; ***********************
-	rts
+  rts
 
 ; ###################
 ; ###################
@@ -134,11 +134,12 @@ MainUser:
 ; TODO: optimize. Or eliminate entirely, TBD.
 
 MainBSSClear:
-	lea.l	_MainBssStart.l, a0
-.Loop:	clr.b	(a0)+
-	cmpa.l	#_MainBssEnd, a0
-	bne.s	.Loop
-	rts
+  lea.l _MainBssStart.l, a0
+.Loop:
+  clr.b (a0)+
+  cmpa.l #_MainBssEnd, a0
+  bne.s .Loop
+  rts
 
 ; #####################
 ; #####################
@@ -148,7 +149,7 @@ MainBSSClear:
 ; #####################
 ; #####################
 
-	.bss
-	.even
-_MainBssEnd:				; End of the BSS - clear up to that address
-	.end
+  .bss
+  .even
+_MainBssEnd:		; End of the BSS - clear up to that address
+  .end
