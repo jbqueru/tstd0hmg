@@ -57,8 +57,9 @@ hmsa out/tstd0hmg/tstd0hmg.st DS || exit $?
 # .st files are plain FAT12 images, they can be manipulated with mtools,
 mcopy -i out/tstd0hmg/tstd0hmg.st out/tos/TSTD0HMG.PRG ::/ || exit $?
 # Create a .msa version of the image, which is smaller
-# Ignore status code for now, hmsa returns it wrong
-hmsa out/tstd0hmg/tstd0hmg.st # || exit $?
+# Warning: hmsa has a bug up to hatari 2.5.0 where it returs the wrong
+#     status code. Feel free to ignore it in that case.
+hmsa out/tstd0hmg/tstd0hmg.st || exit $?
 
 echo '(*) prepare source archive'
 rm -rf out/src || exit $?
