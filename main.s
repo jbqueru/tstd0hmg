@@ -116,7 +116,9 @@ MainUser:
 
 .MainSuper:
 
-; bsr.s MainBSSClear
+  bsr.s MainBSSClear.l
+
+  bsr.s IrqStackSetup.l
 
   moveq.l #0, d0
   move.b GFX_VBASE_HIGH.w, d0
@@ -124,7 +126,7 @@ MainUser:
   move.b GFX_VBASE_MID.w, d0
   lsl.l #8, d0
   movea.l d0, a0
-  lea.l VmaxLogo, a1
+  lea.l VmaxLogo.l, a1
   move.w #80*133-1, d0
 FillScreen:
   move.w (a1)+, (a0)+
@@ -135,7 +137,9 @@ FillScreen:
 
 WaitKey:
   cmp.b #$39, $fffffc02.w
-  bne.s WaitKey
+  bne.s WaitKey.l
+
+  bsr.s IrqStackReset.l
 
 ; ***********************
 ; ** Back to user mode **
@@ -167,6 +171,16 @@ VmaxLogo:
   .incbin "out/inc/vmax_bitmap.bin"
 VmaxPalette:
   .incbin "out/inc/vmax_palette.bin"
+
+; ##########################
+; ##########################
+; ##                      ##
+; ##   Hardware helpers   ##
+; ##                      ##
+; ##########################
+; ##########################
+
+  .include "irqstack.s"
 
 ; #####################
 ; #####################
