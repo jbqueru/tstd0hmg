@@ -10,7 +10,7 @@ to be used as a true cracktro, given that there are no new games
 to crack yet, but, by virtue of being Open Source, it can be used
 as such if someone wants to.
 
-This is meant to be a homage to TST D0, a cracker from the era
+This is meant to be an homage to TST D0, a cracker from the era
 of the Atari ST, who passed away in an accident. Some cracktro
 work had been an opportunity for collaboration between VMax and
 the MegaBuSTers, which is captured in
