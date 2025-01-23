@@ -120,6 +120,7 @@ MainUser:
 
   bsr.s IrqStackSetup.l
   bsr.w MfpSetup.l
+  bsr.w GfxSetup.l
 
   moveq.l #0, d0
   move.b GFX_VBASE_HIGH.w, d0
@@ -140,6 +141,7 @@ WaitKey:
   cmp.b #$39, $fffffc02.w
   bne.s WaitKey.l
 
+  bsr.w GfxReset.l
   bsr.w MfpReset.l
   bsr.s IrqStackReset.l
 
@@ -184,6 +186,7 @@ VmaxPalette:
 
   .include "irqstack.s"
   .include "mfp.s"
+  .include "gfx.s"
 
 ; #####################
 ; #####################
