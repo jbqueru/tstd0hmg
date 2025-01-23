@@ -1,5 +1,21 @@
 # Homage to TST D0
 
+This is a demo for the Atari ST family, developed by Djaybee and
+Pandafox from the MegaBuSTers, in collaboration with AD from MPS.
+
+This is a fake cracktro, i.e. it is meant to look like the
+type of intro that crackers would typically add to games after
+removing the copy protections. It wasn't originally developed
+to be used as a true cracktro, given that there are no new games
+to crack yet, but, by virtue of being Open Source, it can be used
+as such if someone wants to.
+
+This is meant to be a homage to TST D0, a cracker from the era
+of the Atari ST, who passed away in an accident. Some cracktro
+work had been an opportunity for collaboration between VMax and
+the MegaBuSTers, which is captured in
+[this YouTube video](https://youtu.be/gM9xbzor0TI?si=HSIA2ELya2SluoCb).
+
 The demo is believed to run on a wide variety of ST hardware,
 from a plain 520 ST all the way to the TT or Falcon. However,
 it ignores any hardware beyond that of a plain ST, such that
@@ -10,6 +26,29 @@ resolutions will have undesired effects.
 
 It's been developed with rmac 2.2.25 and tested under Hatari
 v2.6.0-devel with EmuTOS 1.3.
+
+# Timeline and design thoughts
+
+Jan 13 2025: announcement for a fake cracktro showcase in mid-March.
+Jan 14 2025: Pandafox and Djaybee agree to work on such a fake cracktro
+and announce the MegaBuSTers' participation.
+Jan 20-21 2025: Pandafox suggests a remake of the VMax cracktro,
+possibly with enhancements as possible, ideally starting with
+something faithful to the original and progressively evolving into
+the enhanced version. Hints at the possibility of some distortion
+on the 3D cubes.
+Jan 21 2025: Pandafox proposes a redrawn logo.
+Jan 22 2025: Djaybee explores the possibilities behind the 3D cubes.
+Precomputing a long animation might take a lot of RAM (450kiB for 8
+seconds of 96*96*1bpp), while rendering it in real-time would limit
+the complexity and/or require optimizations that there might not be
+enough time to develop. A hybrid solution could be possible, precomputing
+some of the frames and rendering the other frames on-demand (but
+in sub-real-time).
+Jan 22 2025: Djaybee sets up the baseline git project.
+Jan 23 2025: Technically, mode 0 pixels are skinny 59:64 in PAL,
+which gives a hint about how large the 3D cubes need to be to have
+the proper aspect ratio on a real ST with a real TV.
 
 # What's in the package
 
