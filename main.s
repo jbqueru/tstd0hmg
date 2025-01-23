@@ -118,6 +118,25 @@ MainUser:
 
 ; bsr.s MainBSSClear
 
+  moveq.l #0, d0
+  move.b GFX_VBASE_HIGH.w, d0
+  lsl.l #8, d0
+  move.b GFX_VBASE_MID.w, d0
+  lsl.l #8, d0
+  movea.l d0, a0
+  lea.l VmaxLogo, a1
+  move.w #80*133-1, d0
+FillScreen:
+  move.w (a1)+, (a0)+
+  dbra.w d0, FillScreen
+
+  movem.w VmaxPalette.l, d0-d7
+  movem.w d0-d7, $ffff8240.w
+
+WaitKey:
+  cmp.b #$39, $fffffc02.w
+  bne.s WaitKey
+
 ; ***********************
 ; ** Back to user mode **
 ; ***********************
@@ -140,6 +159,14 @@ MainBSSClear:
   cmpa.l #_MainBssEnd, a0
   bne.s .Loop
   rts
+
+; ##############################################33
+  .data
+  .even
+VmaxLogo:
+  .incbin "out/inc/vmax_bitmap.bin"
+VmaxPalette:
+  .incbin "out/inc/vmax_palette.bin"
 
 ; #####################
 ; #####################

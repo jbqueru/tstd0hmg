@@ -73,7 +73,7 @@ void main() {
 			}
 		}
 	}
-	if (xmin != 3 || xmax != 317 || ymin != 33 || ymax != 165) {
+	if (xmin != 3 || xmax != 317 || ymin != 26 || ymax != 158) {
 		printf("Unexpected logo size (%d,%d)-(%d,%d) (expected (3,33)-(317,165))\n",
 			xmin, ymin, xmax, ymax);
 		exit(1);
@@ -85,24 +85,24 @@ void main() {
 
 	for (int y = 0; y < 133; y++) {
 		for (int x = 0; x < 320; x++) {
-			unsigned int c = rawpixels[x + 0][y + 33];
+			unsigned int c = rawpixels[x + 0][y + 26];
 			if (c & 1) {
-				logo[(x / 16) * 2 + (x & 8) / 8 + y * 120 + 0] |= (0x80 >> (x & 7));
+				logo[(x / 16) * 8 + (x & 8) / 8 + y * 160 + 0] |= (0x80 >> (x & 7));
 			}
 			if (c & 2) {
-				logo[(x / 16) * 2 + (x & 8) / 8 + y * 120 + 30] |= (0x80 >> (x & 7));
+				logo[(x / 16) * 8 + (x & 8) / 8 + y * 160 + 2] |= (0x80 >> (x & 7));
 			}
 			if (c & 4) {
-				logo[(x / 16) * 2 + (x & 8) / 8 + y * 120 + 60] |= (0x80 >> (x & 7));
+				logo[(x / 16) * 8 + (x & 8) / 8 + y * 160 + 4] |= (0x80 >> (x & 7));
 			}
 			if (c & 8) {
-				logo[(x / 16) * 2 + (x & 8) / 8 + y * 120 + 90] |= (0x80 >> (x & 7));
+				logo[(x / 16) * 8 + (x & 8) / 8 + y * 160 + 6] |= (0x80 >> (x & 7));
 			}
 		}
 	}
 
 	outputfile = fopen("out/inc/vmax_bitmap.bin", "wb");
-	fwrite(logo, 1, 120 * 112, outputfile);
+	fwrite(logo, 1, 320 / 2 * 133, outputfile);
 	fclose(outputfile);
 
 	outputfile = fopen("out/inc/vmax_palette.bin", "wb");
