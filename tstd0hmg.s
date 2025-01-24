@@ -34,9 +34,12 @@ DemoStart:
   lsl.l #8, d0
   movea.l d0, a0
   lea.l VmaxLogo.l, a1
-  move.w #80*133-1, d0
+  move.w #20*133-1, d0
 FillScreen:
   move.w (a1)+, (a0)+
+  move.w (a1)+, (a0)+
+  move.w (a1)+, (a0)+
+  addq.l #2, a0
   dbra.w d0, FillScreen
 
   movem.w VmaxPalette.l, d0-d7
