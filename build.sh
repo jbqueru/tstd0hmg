@@ -35,6 +35,9 @@ out/bin/convert_bitmaps || exit $?
 echo '(*) assemble code'
 rmac -s -p -4 main.s -o out/tos/TSTD0HMG.PRG || exit $?
 
+echo '(*) compress code'
+upx -9 -q out/tos/TSTD0HMG.PRG
+
 echo '(*) clear/create distribution directory'
 rm -rf out/tstd0hmg || exit $?
 mkdir -p out/tstd0hmg || exit $?
