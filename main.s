@@ -71,10 +71,20 @@
 ; ###############################
 ; ###############################
 
+; *****************************
+; ** Assembler configuration **
+; *****************************
   .68000		; The best. Maybe. At least, the best for Atari ST.
+
+; ***************
+; ** Constants **
+; ***************
   .include "defines.s"	; ST hardware/OS defines
   .include "params.s"	; Parameters for the demo
 
+; ***************
+; ** BSS guard **
+; ***************
   .bss
 _MainBssStart:		; Beginning of the BSS - clear from that address
 
@@ -87,9 +97,6 @@ _MainBssStart:		; Beginning of the BSS - clear from that address
 ; ##                                    ##
 ; ########################################
 ; ########################################
-
-; Invoking a supervisor subroutine is good enough for us here, since we won't
-; make any system calls.
 
 MainUser:
 ; **********************************
@@ -116,14 +123,26 @@ MainUser:
 
 .MainSuper:
 
+; ******************************************
+; ** Make sure our RAM is in a good state **
+; ******************************************
   bsr.s MainBSSClear.l
 
+; *****************************
+; ** Initialize the hardware **
+; *****************************
   bsr.s IrqStackSetup.l
   bsr.s MfpSetup.l
   bsr.w GfxSetup.l
 
+; *********************************
+; ** Invoke the actual demo code **
+; *********************************
   bsr.w DemoStart.l
 
+; **************************
+; ** Restore the hardware **
+; **************************
   bsr.w GfxReset.l
   bsr.s MfpReset.l
   bsr.w IrqStackReset.l
@@ -151,25 +170,25 @@ MainBSSClear:
   bne.s .Loop
   rts
 
-; ##########################
-; ##########################
-; ##                      ##
-; ##   Hardware helpers   ##
-; ##                      ##
-; ##########################
-; ##########################
+; ##################################
+; ##################################
+; ##                              ##
+; ##   Include hardware helpers   ##
+; ##                              ##
+; ##################################
+; ##################################
 
   .include "mfp.s"
   .include "irqstack.s"
   .include "gfx.s"
 
-; ########################
-; ########################
-; ##                    ##
-; ##   Main demo code   ##
-; ##                    ##
-; ########################
-; ########################
+; ################################
+; ################################
+; ##                            ##
+; ##   Include main demo code   ##
+; ##                            ##
+; ################################
+; ################################
 
   .include "tstd0hmg.s"
 
