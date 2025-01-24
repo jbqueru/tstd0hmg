@@ -106,7 +106,7 @@ void main() {
 	fclose(outputfile);
 
 	outputfile = fopen("out/inc/vmax_palette.bin", "wb");
-	fwrite(pi1 + 2, 2, 16, outputfile);
+	fwrite(pi1 + 2, 2, 8, outputfile);
 	fclose(outputfile);
 
 }
