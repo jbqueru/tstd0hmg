@@ -26,7 +26,7 @@
 echo '(*) create output directories'
 mkdir -p out/bin || exit $?
 mkdir -p out/inc || exit $?
-mkdir -p out/tos || exit $?
+mkdir -p out/tos/AUTO || exit $?
 
 echo '(*) convert bitmaps'
 cc convert_bitmaps.c -o out/bin/convert_bitmaps || exit $?
