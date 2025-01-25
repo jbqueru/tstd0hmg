@@ -46,7 +46,17 @@ FillScreen:
 
   movea.l gfx_fb_front, a0
   addq.l #6, a0
-  move.w #$aa55, (a0)
+
+  move.w #$8000, d0
+  moveq.l #127, d1
+NextLine:
+  or.w d0, (a0)
+  ror.w d0
+  bcc.s ColOk
+  addq.l #8, a0
+ColOk:
+  lea 160(a0), a0
+  dbra.w d1, NextLine
 
 WaitKey:
   cmp.b #$39, $fffffc02.w
