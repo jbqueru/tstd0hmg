@@ -49,6 +49,22 @@ Jan 22 2025: Djaybee sets up the baseline git project.
 Jan 23 2025: Technically, mode 0 pixels are skinny 59:64 in PAL,
 which gives a hint about how large the 3D cubes need to be to have
 the proper aspect ratio on a real ST with a real TV.
+Jan 25 2025: Explorations in precomputing the 3D -> 2D coordinate
+transforms. Those computations are easy to do in C with floating-point
+numbers. In a naive implementation, each line can be made to take
+4 bytes (xy coordinates 0-255). A plain cube without any decoration
+takes at most 9 lines (3 faces visible), i.e. 36 bytes. An MB logo
+can be drawn with 10 lines, visible on about half of the frames.
+That adds up to 50-60 bytes per frame, 500 frames for a 10-second
+animation, less than 30kB overall.
+A line can be defined by a start point (offset + bit number), a
+direction, a Bresenham increment, and a number of pixels. For a
+maximum size of 128x128, the offset fits in 10 bits (1024 words),
+the bit number takes 4 bits, there are 4 possible directions (2 bits).
+8 bits fit the Bresenham increment, and 7 bits is enough for the pixel
+count, with one bit to spare to mark the end of the frame.
+That all fits in 4 bytes.
+
 
 # What's in the package
 
