@@ -27,12 +27,7 @@
   .text
 
 DemoStart:
-  moveq.l #0, d0
-  move.b GFX_VBASE_HIGH.w, d0
-  lsl.l #8, d0
-  move.b GFX_VBASE_MID.w, d0
-  lsl.l #8, d0
-  movea.l d0, a0
+  movea.l gfx_fb_front, a0
   lea.l VmaxLogo.l, a1
   move.w #20*133-1, d0
 FillScreen:
@@ -42,8 +37,16 @@ FillScreen:
   addq.l #2, a0
   dbra.w d0, FillScreen
 
-  movem.w VmaxPalette.l, d0-d7
-  movem.w d0-d7, $ffff8240.w
+  movem.l VmaxPalette.l, d0-d3
+  moveq.l #-1, d4
+  move.l d4, d5
+  move.l d4, d6
+  move.l d4, d7
+  movem.l d0-d7, $ffff8240.w
+
+  movea.l gfx_fb_front, a0
+  addq.l #6, a0
+  move.w #$aa55, (a0)
 
 WaitKey:
   cmp.b #$39, $fffffc02.w
