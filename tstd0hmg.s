@@ -49,10 +49,14 @@ FillScreen:
 
   move.w #$8000, d0
   moveq.l #127, d1
+  moveq.l #127, d7
+  moveq.l #48, d6
 NextLine:
   or.w d0, (a0)
+  add.b d6, d7
+  bcc.s ColOk.l
   ror.w d0
-  bcc.s ColOk
+  bcc.s ColOk.l
   addq.l #8, a0
 ColOk:
   lea 160(a0), a0
