@@ -44,11 +44,10 @@ FillScreen:
   move.l d4, d7
   movem.l d0-d7, $ffff8240.w
 
-  movea.l gfx_fb_front, a0
-  addq.l #6, a0
+  lea.l LineBuffer.l, a0
 
   move.w #$8000, d0
-  moveq.l #127, d1
+  moveq.l #79, d1
   moveq.l #127, d7
   moveq.l #48, d6
 NextLine:
@@ -57,10 +56,24 @@ NextLine:
   bcc.s ColOk.l
   ror.w d0
   bcc.s ColOk.l
-  addq.l #8, a0
+  addq.l #2, a0
 ColOk:
-  lea 160(a0), a0
+  lea 12(a0), a0
   dbra.w d1, NextLine
+
+  lea.l LineBuffer.l, a0
+  movea.l gfx_fb_front.l, a1
+  addq.l #6, a1
+  moveq.l #87, d7
+CopyLine:
+  move.w (a0)+, (a1)
+  move.w (a0)+, 8(a1)
+  move.w (a0)+, 16(a1)
+  move.w (a0)+, 24(a1)
+  move.w (a0)+, 32(a1)
+  move.w (a0)+, 40(a1)
+  lea.l 160(a1), a1
+  dbra.w d7, CopyLine.l
 
 WaitKey:
   cmp.b #$39, $fffffc02.w
@@ -75,3 +88,9 @@ VmaxLogo:
   .incbin "out/inc/vmax_bitmap.bin"
 VmaxPalette:
   .incbin "out/inc/vmax_palette.bin"
+
+
+  .bss
+  .even
+LineBuffer:
+  .ds.w 6*88
