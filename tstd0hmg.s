@@ -28,6 +28,7 @@
 
 DemoStart:
   movea.l gfx_fb_front, a0
+  lea 160*34(a0), a0
   lea.l VmaxLogo.l, a1
   move.w #20*133-1, d0
 FillScreen:
@@ -63,15 +64,28 @@ ColOk:
 
   lea.l LineBuffer.l, a0
   movea.l gfx_fb_front.l, a1
-  addq.l #6, a1
+  lea.l 56*160+6(a1), a1
   moveq.l #87, d7
 CopyLine:
-  move.w (a0)+, (a1)
-  move.w (a0)+, 8(a1)
-  move.w (a0)+, 16(a1)
-  move.w (a0)+, 24(a1)
-  move.w (a0)+, 32(a1)
-  move.w (a0)+, 40(a1)
+  movem.w (a0)+, d0-d5
+  move.w d0, (a1)
+  move.w d1, 8(a1)
+  move.w d2, 16(a1)
+  move.w d3, 24(a1)
+  move.w d4, 32(a1)
+  move.w d5, 40(a1)
+  move.w d0, 56(a1)
+  move.w d1, 64(a1)
+  move.w d2, 72(a1)
+  move.w d3, 80(a1)
+  move.w d4, 88(a1)
+  move.w d5, 96(a1)
+  move.w d0, 112(a1)
+  move.w d1, 120(a1)
+  move.w d2, 128(a1)
+  move.w d3, 136(a1)
+  move.w d4, 144(a1)
+  move.w d5, 152(a1)
   lea.l 160(a1), a1
   dbra.w d7, CopyLine.l
 
