@@ -64,6 +64,12 @@ the bit number takes 4 bits, there are 4 possible directions (2 bits).
 8 bits fit the Bresenham increment, and 7 bits is enough for the pixel
 count, with one bit to spare to mark the end of the frame.
 That all fits in 4 bytes.
+Jan 26 2025: The line data mentioned yesterday is enough to draw
+lines aligned on exact pixels, but not for partial pixels, which
+would potentially result in smoother animation (i.e. sub-pixel
+precision for the line positioning). The initial partial pixel
+count for Bresenham might therefore need to be stored as well,
+which would be a 5th byte per line.
 
 
 # What's in the package
