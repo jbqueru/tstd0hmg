@@ -45,22 +45,75 @@ FillScreen:
   move.l d4, d7
   movem.l d0-d7, $ffff8240.w
 
+LineVDown:
   lea.l LineBuffer.l, a0
-
   move.w #$8000, d0
   moveq.l #79, d1
   moveq.l #127, d7
   moveq.l #48, d6
-NextLine:
+.NextLine:
   or.w d0, (a0)
   add.b d6, d7
-  bcc.s ColOk.l
+  bcc.s .ColOk.l
   ror.w d0
-  bcc.s ColOk.l
+  bcc.s .ColOk.l
   addq.l #2, a0
-ColOk:
+.ColOk:
   lea 12(a0), a0
-  dbra.w d1, NextLine
+  dbra.w d1, .NextLine
+
+LineVUp:
+  lea.l LineBuffer+12*87.l, a0
+  move.w #$0004, d0
+  moveq.l #63, d1
+  moveq.l #127, d7
+  moveq.l #113, d6
+.NextLine:
+  or.w d0, (a0)
+  add.b d6, d7
+  bcc.s .ColOk.l
+  ror.w d0
+  bcc.s .ColOk.l
+  addq.l #2, a0
+.ColOk:
+  lea -12(a0), a0
+  dbra.w d1, .NextLine
+
+LineHDown:
+  lea.l LineBuffer+20*12.l, a0
+  move.w #$4000, d0
+  moveq.l #71, d1
+  moveq.l #127, d7
+  moveq.l #15, d6
+.NextLine:
+  or.w d0, (a0)
+  ror.w d0
+  bcc.s .ColOk.l
+  addq.l #2, a0
+.ColOk:
+  add.b d6, d7
+  bcc.s .RowOk.l
+  lea 12(a0), a0
+.RowOk:
+  dbra.w d1, .NextLine
+
+LineHUp:
+  lea.l LineBuffer+70*12.l, a0
+  move.w #$0800, d0
+  moveq.l #39, d1
+  moveq.l #127, d7
+  moveq.l #197, d6
+.NextLine:
+  or.w d0, (a0)
+  ror.w d0
+  bcc.s .ColOk.l
+  addq.l #2, a0
+.ColOk:
+  add.b d6, d7
+  bcc.s .RowOk.l
+  lea -12(a0), a0
+.RowOk:
+  dbra.w d1, .NextLine
 
   lea.l LineBuffer.l, a0
   movea.l gfx_fb_front.l, a1
