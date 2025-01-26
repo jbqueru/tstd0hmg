@@ -127,18 +127,21 @@ CopyLine:
   move.w d3, 24(a1)
   move.w d4, 32(a1)
   move.w d5, 40(a1)
+
   move.w d0, 56(a1)
   move.w d1, 64(a1)
   move.w d2, 72(a1)
   move.w d3, 80(a1)
   move.w d4, 88(a1)
   move.w d5, 96(a1)
+
   move.w d0, 112(a1)
   move.w d1, 120(a1)
   move.w d2, 128(a1)
   move.w d3, 136(a1)
   move.w d4, 144(a1)
   move.w d5, 152(a1)
+
   lea.l 160(a1), a1
   dbra.w d7, CopyLine.l
 
@@ -156,6 +159,8 @@ VmaxLogo:
 VmaxPalette:
   .incbin "out/inc/vmax_palette.bin"
 
+AnimXY:
+;  .dc.b %ooddbbbb, %oooooooo, %fccccccc, %iiiiiiii
 
   .bss
   .even
