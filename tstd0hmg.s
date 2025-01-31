@@ -42,7 +42,7 @@ FillScreen:
   dbra.w d0, FillScreen
 
   movem.l VmaxPalette.l, d0-d3
-  moveq.l #-1, d4
+  move.l #$6740674, d4
   move.l d4, d5
   move.l d4, d6
   move.l d4, d7
