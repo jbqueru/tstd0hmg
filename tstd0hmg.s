@@ -49,7 +49,10 @@ FillScreen:
   movem.l d0-d7, $ffff8240.w
 
 MainLoop:
+; Wait for VBL
   stop #$2300
+
+; Play music
   movea.l MusicPlay.l, a0
   moveq.l #13, d7
 .CopyReg:
@@ -62,6 +65,31 @@ MainLoop:
 .MusicOk:
   move.l a0, MusicPlay.l
 
+; Clear offscreen buffer
+  lea.l LineBufferEnd.l, a6
+  moveq.l #0, d0
+  moveq.l #0, d1
+  moveq.l #0, d2
+  moveq.l #0, d3
+  moveq.l #0, d4
+  moveq.l #0, d5
+  moveq.l #0, d6
+  moveq.l #0, d7
+  movea.l d0, a0
+  movea.l d0, a1
+  movea.l d0, a2
+  movea.l d0, a3
+  .rept 22
+  movem.l d0-d7/a0-a3, -(a6)
+  .endr
+
+moveq.l #17, d7
+.TimeLine0:
+  not.w $ffff8240.w
+  dbra.w d7, .TimeLine0.l
+
+
+; Draw lines into offscreen buffer
   lea AnimXY, a6
   move.b (a6)+, d1	; pixel loop counter
   andi.w #$7f, d1	; mast unnecessary bits
@@ -311,6 +339,7 @@ AnimXY:
   .even
 LineBuffer:
   .ds.w 6*88
+LineBufferEnd:
 
 MusicPlay:
   .ds.l 1
