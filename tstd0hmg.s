@@ -160,7 +160,20 @@ VmaxPalette:
   .incbin "out/inc/vmax_palette.bin"
 
 AnimXY:
-;  .dc.b %ooddbbbb, %oooooooo, %fccccccc, %iiiiiiii
+;  .dc.b %flllllll, %ooddbbbb, %oooooooo, %iiiiiiii
+
+;        +----------------------------------------- first line in frame
+;        |+++++++---------------------------------- line length
+;        ||||||||   ++----------------------------- high 2 bits of offset
+;        ||||||||   ||++--------------------------- line direction
+;        ||||||||   ||||++++----------------------- bit number of first pixel
+;        ||||||||   ||||||||   ++++++++------------ low 8 bits of offset
+;        ||||||||   ||||||||   ||||||||   ++++++++- Bresenham increment
+;        ||||||||   ||||||||   ||||||||   ||||||||
+  .dc.b %10010000, %00001111, %00000000, %10000000
+EndAnim:
+  .dc.b %10000000
+
 
   .bss
   .even
