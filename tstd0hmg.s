@@ -27,6 +27,9 @@
   .text
 
 DemoStart:
+  move.l #VBL, VECTOR_VBL.w
+  move.l #VmaxMusicStart, MusicPlay.l
+
   movea.l gfx_fb_front, a0
   lea 160*34(a0), a0
   lea.l VmaxLogo.l, a1
@@ -236,10 +239,26 @@ CopyLine:
   dbra.w d7, CopyLine.l
 
 WaitKey:
+  stop #$2300
+  movea.l MusicPlay.l, a0
+  moveq.l #13, d7
+.CopyReg:
+  move.b d7, PSG_REG.w
+  move.b (a0)+, PSG_WRITE.w
+  dbra.w d7, .CopyReg.l
+  cmpa.l #VmaxMusicEnd, a0
+  bne.s .MusicOk.l
+  lea.l VmaxMusicRestart, a0
+.MusicOk:
+  move.l a0, MusicPlay.l
+
   cmp.b #$39, $fffffc02.w
   bne.s WaitKey.l
 
   rts
+
+VBL:
+  rte
 
 ; ##############################################33
   .data
@@ -248,6 +267,11 @@ VmaxLogo:
   .incbin "out/inc/vmax_bitmap.bin"
 VmaxPalette:
   .incbin "out/inc/vmax_palette.bin"
+
+VmaxMusicStart:
+  .incbin "AREGDUMP.BIN"
+VmaxMusicEnd:
+VmaxMusicRestart .equ VmaxMusicStart + 14 * 7 * 64 * 2
 
 AnimXY:
 ;  .dc.b %flllllll, %ooddbbbb, %oooooooo, %iiiiiiii
@@ -277,3 +301,6 @@ AnimXY:
   .even
 LineBuffer:
   .ds.w 6*88
+
+MusicPlay:
+  .ds.l 1
