@@ -45,6 +45,18 @@ FillScreen:
   move.l d4, d7
   movem.l d0-d7, $ffff8240.w
 
+  lea AnimXY, a6
+  move.b (a6)+, d1	; pixel loop counter
+  andi.w #$7f, d1	; mast unnecessary bits
+
+StartLine:
+  moveq.l #0, d2
+  move.b (a6)+, d2
+  bclr.l #5, d2		; line angle, H or V?
+  beq.s LineH
+  bclr.l #4, d2		; line direction, U or D?
+  beq.s LineVUp
+
 LineVDown:
   lea.l LineBuffer.l, a0
   move.w #$8000, d0
@@ -61,6 +73,7 @@ LineVDown:
 .ColOk:
   lea 12(a0), a0
   dbra.w d1, .NextLine
+  bra.s LineDone.l
 
 LineVUp:
   lea.l LineBuffer+12*87.l, a0
@@ -78,6 +91,11 @@ LineVUp:
 .ColOk:
   lea -12(a0), a0
   dbra.w d1, .NextLine
+  bra.s LineDone.l
+
+LineH:
+  bclr.l #4, d2		; line direction, U or D?
+  beq.s LineHUp
 
 LineHDown:
   lea.l LineBuffer+20*12.l, a0
@@ -96,13 +114,19 @@ LineHDown:
   lea 12(a0), a0
 .RowOk:
   dbra.w d1, .NextLine
+  bra.s LineDone.l
 
 LineHUp:
-  lea.l LineBuffer+70*12.l, a0
-  move.w #$0800, d0
-  moveq.l #39, d1
+  moveq.l #0, d0
+  bset.l d2, d0
+  add.w d2, d2
+  add.w d2, d2
+  move.b (a6)+, d2
+  add.w d2, d2
+  lea.l LineBuffer.l, a0
+  adda.w d2, a0
+  move.b (a6)+, d6
   moveq.l #127, d7
-  moveq.l #197, d6
 .NextLine:
   or.w d0, (a0)
   ror.w d0
@@ -113,7 +137,12 @@ LineHUp:
   bcc.s .RowOk.l
   lea -12(a0), a0
 .RowOk:
-  dbra.w d1, .NextLine
+  dbra.w d1, .NextLine.l
+
+LineDone:
+  move.b (a6)+, d1	; pixel loop counter
+  bclr #7, d1
+  beq.w StartLine.l
 
   lea.l LineBuffer.l, a0
   movea.l gfx_fb_front.l, a1
@@ -163,15 +192,18 @@ AnimXY:
 ;  .dc.b %flllllll, %ooddbbbb, %oooooooo, %iiiiiiii
 
 ;        +----------------------------------------- first line in frame
-;        |+++++++---------------------------------- line length
+;        |+++++++---------------------------------- line length - 1
 ;        ||||||||   ++----------------------------- high 2 bits of offset
-;        ||||||||   ||++--------------------------- line direction
+;        ||||||||   ||+---------------------------- line direction 0=H 1=V
+;        ||||||||   |||+--------------------------- line direction 0=U 1=D
 ;        ||||||||   ||||++++----------------------- bit number of first pixel
 ;        ||||||||   ||||||||   ++++++++------------ low 8 bits of offset
 ;        ||||||||   ||||||||   ||||||||   ++++++++- Bresenham increment
 ;        ||||||||   ||||||||   ||||||||   ||||||||
-  .dc.b %10010000, %00001111, %00000000, %10000000
-EndAnim:
+  .dc.b %10010000, %01001111, %00001011, %10000000
+;           17 px     HU0,0               0.5
+
+  EndAnim:
   .dc.b %10000000
 
 
