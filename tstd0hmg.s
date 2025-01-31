@@ -49,20 +49,46 @@ FillScreen:
   move.b (a6)+, d1	; pixel loop counter
   andi.w #$7f, d1	; mast unnecessary bits
 
+; ###############################
+; ###############################
+; ##                           ##
+; ##   Line-drawing routines   ##
+; ##                           ##
+; ###############################
+; ###############################
+
+; At this point, D1.w has the loop counter to draw the lines
+
 StartLine:
-  moveq.l #0, d2
-  move.b (a6)+, d2
+  moveq.l #0, d2	; Clear register
+  move.b (a6)+, d2	; Read line info
+			; 76: top 2 bits of draw offset
+			; 54: line angle
+			; 3210: initial pixel number
   bclr.l #5, d2		; line angle, H or V?
-  beq.s LineH
+  beq.s LineH.l
   bclr.l #4, d2		; line direction, U or D?
-  beq.s LineVUp
+  beq.s LineVUp.l
 
 LineVDown:
+; Set exactly 1 bit in d0.w, specified by bits 0-3 of d2
+; d2 bit 4 is guaranteed to be 0, bits 5-7 are ignored
+  moveq.l #0, d0
+  bset.l d2, d0
+
+; shift bits 6-7 to 8-9
+  add.w d2, d2
+  add.w d2, d2
+; read low 8 bits of word count
+  move.b (a6)+, d2
+; multiply by 2 to get byte offset
+  add.w d2, d2
+; compute base address of drawing code
   lea.l LineBuffer.l, a0
-  move.w #$8000, d0
-  moveq.l #79, d1
+  adda.w d2, a0
+
+  move.b (a6)+, d6
   moveq.l #127, d7
-  moveq.l #48, d6
 .NextLine:
   or.w d0, (a0)
   add.b d6, d7
@@ -72,15 +98,28 @@ LineVDown:
   addq.l #2, a0
 .ColOk:
   lea 12(a0), a0
-  dbra.w d1, .NextLine
-  bra.s LineDone.l
+  dbra.w d1, .NextLine.l
+  bra.w LineDone.l
 
 LineVUp:
-  lea.l LineBuffer+12*87.l, a0
-  move.w #$0004, d0
-  moveq.l #63, d1
+; Set exactly 1 bit in d0.w, specified by bits 0-3 of d2
+; d2 bit 4 is guaranteed to be 0, bits 5-7 are ignored
+  moveq.l #0, d0
+  bset.l d2, d0
+
+; shift bits 6-7 to 8-9
+  add.w d2, d2
+  add.w d2, d2
+; read low 8 bits of word count
+  move.b (a6)+, d2
+; multiply by 2 to get byte offset
+  add.w d2, d2
+; compute base address of drawing code
+  lea.l LineBuffer.l, a0
+  adda.w d2, a0
+
+  move.b (a6)+, d6
   moveq.l #127, d7
-  moveq.l #113, d6
 .NextLine:
   or.w d0, (a0)
   add.b d6, d7
@@ -90,7 +129,7 @@ LineVUp:
   addq.l #2, a0
 .ColOk:
   lea -12(a0), a0
-  dbra.w d1, .NextLine
+  dbra.w d1, .NextLine.l
   bra.s LineDone.l
 
 LineH:
@@ -98,11 +137,24 @@ LineH:
   beq.s LineHUp
 
 LineHDown:
-  lea.l LineBuffer+20*12.l, a0
-  move.w #$4000, d0
-  moveq.l #71, d1
+; Set exactly 1 bit in d0.w, specified by bits 0-3 of d2
+; d2 bit 4 is guaranteed to be 0, bits 5-7 are ignored
+  moveq.l #0, d0
+  bset.l d2, d0
+
+; shift bits 6-7 to 8-9
+  add.w d2, d2
+  add.w d2, d2
+; read low 8 bits of word count
+  move.b (a6)+, d2
+; multiply by 2 to get byte offset
+  add.w d2, d2
+; compute base address of drawing code
+  lea.l LineBuffer.l, a0
+  adda.w d2, a0
+
+  move.b (a6)+, d6
   moveq.l #127, d7
-  moveq.l #15, d6
 .NextLine:
   or.w d0, (a0)
   ror.w d0
@@ -113,18 +165,26 @@ LineHDown:
   bcc.s .RowOk.l
   lea 12(a0), a0
 .RowOk:
-  dbra.w d1, .NextLine
+  dbra.w d1, .NextLine.l
   bra.s LineDone.l
 
 LineHUp:
+; Set exactly 1 bit in d0.w, specified by bits 0-3 of d2
+; d2 bit 4 is guaranteed to be 0, bits 5-7 are ignored
   moveq.l #0, d0
   bset.l d2, d0
+
+; shift bits 6-7 to 8-9
   add.w d2, d2
   add.w d2, d2
+; read low 8 bits of word count
   move.b (a6)+, d2
+; multiply by 2 to get byte offset
   add.w d2, d2
+; compute base address of drawing code
   lea.l LineBuffer.l, a0
   adda.w d2, a0
+
   move.b (a6)+, d6
   moveq.l #127, d7
 .NextLine:
@@ -204,6 +264,10 @@ AnimXY:
   .dc.b %10010000, %01001111, %00001011, %10000000
 ;           17 px     HU0,0               0.5
   .dc.b %00100000, %01001111, %00001011, %01000000
+
+  .dc.b %00100000, %01011111, %00001011, %01000000
+  .dc.b %00100000, %01101111, %00001011, %01000000
+  .dc.b %00100000, %01111111, %00001011, %01000000
 
   EndAnim:
   .dc.b %10000000
