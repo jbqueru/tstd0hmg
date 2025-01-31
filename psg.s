@@ -42,6 +42,26 @@
 ; ###########################
 ; ###########################
 
+; PsgSetup:
+; * Saves state of PSG sound registers to internal global variable
+; * Clears state of PSG sound registers
+; * Parameters:
+;   - none
+; * Returns:
+;   - none
+; * Modifies:
+;   - d7
+;   - a0
+
+; PsgReset:
+; * Restores state of PSG sound registers from internal global variable
+; * Parameters:
+;   - none
+; * Returns:
+;   - none
+; * Modifies:
+;   - d7
+;   - a0
 
 ; ########################
 ; ########################
@@ -53,6 +73,9 @@
 
   .text
 
+; *********************************
+; ** Save and clear state of PSG **
+; *********************************
 PsgSetup:
   lea.l _psg_save.l, a0
   moveq.l #13, d7
@@ -63,13 +86,16 @@ PsgSetup:
   dbra.w d7, .Loop.l
   rts
 
+; **************************
+; ** Restore state of PSG **
+; **************************
 PsgReset:
   lea.l _psg_save.l, a0
   moveq.l #13, d7
 .Loop:
   move.b d7, PSG_REG.w
   move.b (a0)+, PSG_WRITE.w
-  dbra.w d7, .Loop
+  dbra.w d7, .Loop.l
   rts
 
 ; ###################
@@ -83,4 +109,4 @@ PsgReset:
   .bss
 
 _psg_save:
-  .ds.b	14
+  .ds.b 14
