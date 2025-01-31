@@ -30,16 +30,23 @@ DemoStart:
   move.l #VBL, VECTOR_VBL.w
   move.l #VmaxMusicStart, MusicPlay.l
 
-  movea.l gfx_fb_front, a0
-  lea 160*34(a0), a0
-  lea.l VmaxLogo.l, a1
-  move.w #20*133-1, d0
+  lea.l VmaxLogo.l, a0
+  movea.l gfx_fb_front, a1
+  movea.l gfx_fb_back, a2
+  lea 160*34(a1), a1
+  lea 160*34(a2), a2
+  move.w #20*133-1, d7
 FillScreen:
-  move.w (a1)+, (a0)+
-  move.w (a1)+, (a0)+
-  move.w (a1)+, (a0)+
-  addq.l #2, a0
-  dbra.w d0, FillScreen
+  movem.w (a0)+, d0-d2
+  move.w d0, (a1)+
+  move.w d1, (a1)+
+  move.w d2, (a1)+
+  addq.l #2, a1
+  move.w d0, (a2)+
+  move.w d1, (a2)+
+  move.w d2, (a2)+
+  addq.l #2, a2
+  dbra.w d7, FillScreen.l
 
   movem.l VmaxPalette.l, d0-d3
   move.l #$6740674, d4
@@ -51,6 +58,14 @@ FillScreen:
 MainLoop:
 ; Wait for VBL
   stop #$2300
+
+  move.l gfx_fb_front.l, d0
+  move.l gfx_fb_back.l, gfx_fb_front.l
+  move.l d0, gfx_fb_back.l
+  lsr.w #8, d0
+  move.b d0, $ffff8203.w
+  swap d0
+  move.b d0, $ffff8201.w
 
 ; Play music
   movea.l MusicPlay.l, a0
@@ -256,7 +271,7 @@ LineDone:
   dbra.w d7, .TimeLine1.l
 
   lea.l LineBuffer.l, a0
-  movea.l gfx_fb_front.l, a1
+  movea.l gfx_fb_back.l, a1
   lea.l 56*160+6(a1), a1
   moveq.l #87, d7
 CopyLine:
