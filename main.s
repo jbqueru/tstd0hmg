@@ -134,6 +134,7 @@ MainUser:
   bsr.s IrqStackSetup.l
   bsr.s MfpSetup.l
   bsr.w GfxSetup.l
+  bsr.w PsgSetup.w
 
 ; *********************************
 ; ** Invoke the actual demo code **
@@ -143,6 +144,7 @@ MainUser:
 ; **************************
 ; ** Restore the hardware **
 ; **************************
+  bsr.w PsgReset.w
   bsr.w GfxReset.l
   bsr.s MfpReset.l
   bsr.w IrqStackReset.l
@@ -181,6 +183,7 @@ MainBSSClear:
   .include "mfp.s"
   .include "irqstack.s"
   .include "gfx.s"
+  .include "psg.s"
 
 ; ################################
 ; ################################
