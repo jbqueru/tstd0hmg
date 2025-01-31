@@ -48,6 +48,7 @@ FillScreen:
   move.l d4, d7
   movem.l d0-d7, $ffff8240.w
 
+MainLoop:
   lea AnimXY, a6
   move.b (a6)+, d1	; pixel loop counter
   andi.w #$7f, d1	; mast unnecessary bits
@@ -208,6 +209,11 @@ LineDone:
   bclr #7, d1
   beq.w StartLine.l
 
+  moveq.l #17, d7
+.TimeLine1:
+  not.w $ffff8240.w
+  dbra.w d7, .TimeLine1.l
+
   lea.l LineBuffer.l, a0
   movea.l gfx_fb_front.l, a1
   lea.l 56*160+6(a1), a1
@@ -238,7 +244,11 @@ CopyLine:
   lea.l 160(a1), a1
   dbra.w d7, CopyLine.l
 
-WaitKey:
+  moveq.l #17, d7
+.TimeLine2:
+  not.w $ffff8240.w
+  dbra.w d7, .TimeLine2.l
+
   stop #$2300
   movea.l MusicPlay.l, a0
   moveq.l #13, d7
@@ -253,7 +263,7 @@ WaitKey:
   move.l a0, MusicPlay.l
 
   cmp.b #$39, $fffffc02.w
-  bne.s WaitKey.l
+  bne.w MainLoop.l
 
   rts
 
