@@ -49,6 +49,19 @@ FillScreen:
   movem.l d0-d7, $ffff8240.w
 
 MainLoop:
+  stop #$2300
+  movea.l MusicPlay.l, a0
+  moveq.l #13, d7
+.CopyReg:
+  move.b d7, PSG_REG.w
+  move.b (a0)+, PSG_WRITE.w
+  dbra.w d7, .CopyReg.l
+  cmpa.l #VmaxMusicEnd, a0
+  bne.s .MusicOk.l
+  lea.l VmaxMusicRestart, a0
+.MusicOk:
+  move.l a0, MusicPlay.l
+
   lea AnimXY, a6
   move.b (a6)+, d1	; pixel loop counter
   andi.w #$7f, d1	; mast unnecessary bits
@@ -248,19 +261,6 @@ CopyLine:
 .TimeLine2:
   not.w $ffff8240.w
   dbra.w d7, .TimeLine2.l
-
-  stop #$2300
-  movea.l MusicPlay.l, a0
-  moveq.l #13, d7
-.CopyReg:
-  move.b d7, PSG_REG.w
-  move.b (a0)+, PSG_WRITE.w
-  dbra.w d7, .CopyReg.l
-  cmpa.l #VmaxMusicEnd, a0
-  bne.s .MusicOk.l
-  lea.l VmaxMusicRestart, a0
-.MusicOk:
-  move.l a0, MusicPlay.l
 
   cmp.b #$39, $fffffc02.w
   bne.w MainLoop.l
