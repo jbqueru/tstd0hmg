@@ -140,6 +140,7 @@ LineHUp:
   dbra.w d1, .NextLine.l
 
 LineDone:
+  moveq.l #0, d1
   move.b (a6)+, d1	; pixel loop counter
   bclr #7, d1
   beq.w StartLine.l
@@ -202,6 +203,7 @@ AnimXY:
 ;        ||||||||   ||||||||   ||||||||   ||||||||
   .dc.b %10010000, %01001111, %00001011, %10000000
 ;           17 px     HU0,0               0.5
+  .dc.b %00100000, %01001111, %00001011, %01000000
 
   EndAnim:
   .dc.b %10000000
