@@ -94,6 +94,47 @@ void main() {
 		fprintf(outputfile, "  .dc.b %%10100000, %%01011111, %%00001011, %d, %%01111111\n", i);
 	}
 
+	for (int n = 0; n < 380; n++) {
+		int x1, y1;
+		if (n < 95) {
+			x1 = n;
+			y1 = 0;
+		} else if (n < 190) {
+			x1 = 95;
+			y1 = n - 95;
+		} else if (n < 285) {
+			x1 = 285 - n;
+			y1 = 95;
+		} else {
+			x1 = 0;
+			y1 = 380 - n;
+		}
+		int x2, y2;
+		x2 = 40;
+		y2 = 20;
+		printf("(1) from (%d,%d) to (%d,%d)\n", x1, y1, x2, y2);
+		if (x1 > x2) {
+			int t;
+			t = x1;
+			x1 = x2;
+			x2 = t;
+			t = y1;
+			y1 = y2;
+			y2 = t;
+		}
+		printf("(2) from (%d,%d) to (%d,%d)\n", x1, y1, x2, y2);
+		int l, o, d, v, b, i, s;
+		if ((y2 - y1) < -(x2 - x1)) {
+			printf("up vertical\n");
+		} else if (y2 <= y1) {
+			printf("up horizontal\n");
+		} else if ((y2 - y1) <= (x2 - x1)) {
+			printf("down horizontal\n");
+		} else {
+			printf("down vertical\n");
+		}
+	}
+
 	fprintf(outputfile, "EndAnim:\n");
 	fprintf(outputfile, "  .dc.b %%10000000\n");
 
