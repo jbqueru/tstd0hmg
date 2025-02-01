@@ -90,8 +90,9 @@ void main() {
 		"; .dc.b %%flllllll, %%ooddbbbb, %%oooooooo, %%iiiiiiii, %%ssssssss\n"
 	);
 
-	fprintf(outputfile, "  .dc.b 0,0,0,0,0\n");
-	fprintf(outputfile, "  .dc.b %%00100000, %%01011111, %%00001011, %%01000000, %%01111111\n");
+	for (int i = 0; i < 256 ; i++) {
+		fprintf(outputfile, "  .dc.b %%10100000, %%01011111, %%00001011, %d, %%01111111\n", i);
+	}
 
 	fprintf(outputfile, "EndAnim:\n");
 	fprintf(outputfile, "  .dc.b %%10000000\n");

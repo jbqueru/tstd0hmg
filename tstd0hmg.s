@@ -29,6 +29,7 @@
 DemoStart:
   move.l #VBL, VECTOR_VBL.w
   move.l #VmaxMusicStart, MusicPlay.l
+  move.l #AnimXY, XYRead.l
 
   lea.l VmaxLogo.l, a0
   movea.l gfx_fb_front, a1
@@ -105,7 +106,7 @@ moveq.l #17, d7
 
 
 ; Draw lines into offscreen buffer
-  lea AnimXY, a6
+  move.l XYRead, a6
   move.b (a6)+, d1	; pixel loop counter
   andi.w #$7f, d1	; mast unnecessary bits
 
@@ -265,6 +266,13 @@ LineDone:
   bclr #7, d1
   beq.w StartLine.l
 
+  subq.l #1, a6
+  cmpa.l #EndAnim, a6
+  bne.s .AnimOK
+  lea.l AnimXY, a6
+.AnimOK:
+  move.l a6, XYRead
+
   moveq.l #17, d7
 .TimeLine1:
   not.w $ffff8240.w
@@ -334,5 +342,7 @@ LineBuffer:
   .ds.w 6*88
 LineBufferEnd:
 
+XYRead:
+  .ds.l 1
 MusicPlay:
   .ds.l 1
