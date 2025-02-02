@@ -124,6 +124,25 @@ void main() {
 	ym[7] = 1;
 	zm[7] = 1;
 
+	xm[8] = 0;
+	ym[8] = 0;
+	zm[8] = -1;
+	xm[9] = 0;
+	ym[9] = 0;
+	zm[9] = 1;
+	xm[10] = 0;
+	ym[10] = -1;
+	zm[10] = 0;
+	xm[11] = -1;
+	ym[11] = 0;
+	zm[11] = 0;
+	xm[12] = 1;
+	ym[12] = 0;
+	zm[12] = 0;
+	xm[13] = 0;
+	ym[13] = 1;
+	zm[13] = 0;
+
 	int e1[ne], e2[ne];
 	e1[0] = 0;
 	e2[0] = 1;
@@ -181,6 +200,14 @@ void main() {
 	face[5][2] = 10;
 	face[5][3] = 11;
 
+	int norm[6];
+	norm[0] = 8;
+	norm[1] = 9;
+	norm[2] = 10;
+	norm[3] = 11;
+	norm[4] = 12;
+	norm[5] = 13;
+
 	for (int n = 0 ; n < len ; n++) {
 		double xo[np], yo[np], zo[np];
 		for (int i = 0; i < np; i++) {
@@ -195,7 +222,6 @@ void main() {
 		for (int i = 0; i < np; i++) {
 			double xa, ya, za;
 			double xb, yb, zb;
-			double xc, yc, zc;
 			xa = xo[i] * cos(n * 2 * M_PI / len) - yo[i] * sin(n * 2 * M_PI / len);
 			ya = xo[i] * sin(n * 2 * M_PI / len) + yo[i] * cos(n * 2 * M_PI / len);
 			za = zo[i];
@@ -204,12 +230,12 @@ void main() {
 			zb = ya * sin(2 * n * 2 * M_PI / len) + za * cos(2 * n * 2 * M_PI / len);
 			xb = xa;
 
-			zc = zb * cos(3 * n * 2 * M_PI / len) - xb * sin(3 * n * 2 * M_PI / len);
-			xc = zb * sin(3 * n * 2 * M_PI / len) + xb * cos(3 * n * 2 * M_PI / len);
-			yc = yb;
+			z3[i] = zb * cos(3 * n * 2 * M_PI / len) - xb * sin(3 * n * 2 * M_PI / len);
+			x3[i] = zb * sin(3 * n * 2 * M_PI / len) + xb * cos(3 * n * 2 * M_PI / len);
+			y3[i] = yb;
 
-			xs[i] = 96 / 2 * (1 + xc * dist / (dist + zc));
-			ys[i] = 88 / 2 * (1 + yc * dist / (dist + zc));
+			xs[i] = 96 / 2 * (1 + x3[i] * dist / (dist + z3[i]));
+			ys[i] = 88 / 2 * (1 + y3[i] * dist / (dist + z3[i]));
 		}
 
 		int vis[ne];
@@ -217,8 +243,16 @@ void main() {
 			vis[i] = 0;
 		}
 		for (int i = 0; i < 6; i++) {
-			for (int j = 0; j < 4; j++) {
-				vis[face[i][j]] = 1;
+			double prod =
+					x3[norm[i]] * x3[e1[face[i][0]]]
+					+
+					y3[norm[i]] * y3[e1[face[i][0]]]
+					+
+					z3[norm[i]] * (dist + z3[e1[face[i][0]]]);
+			if (prod < 0) {
+				for (int j = 0; j < 4; j++) {
+					vis[face[i][j]] = 1;
+				}
 			}
 		}
 
