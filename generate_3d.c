@@ -31,6 +31,8 @@
 const double size = 0.565;
 const double dist = 8 * size;
 const int len = 400;
+const int np = 14;
+const int ne = 12;
 
 void outputline(FILE* outputfile, int first, int x1, int y1, int x2, int y2);
 
@@ -96,37 +98,70 @@ void main() {
 		"; .dc.b %%flllllll, %%oovdbbbb, %%oooooooo, %%iiiiiiii, %%ssssssss\n"
 	);
 
+	double xm[np], ym[np], zm[np];
+	xm[0] = -1;
+	ym[0] = -1;
+	zm[0] = -1;
+	xm[1] = 1;
+	ym[1] = -1;
+	zm[1] = -1;
+	xm[2] = -1;
+	ym[2] = 1;
+	zm[2] = -1;
+	xm[3] = 1;
+	ym[3] = 1;
+	zm[3] = -1;
+	xm[4] = -1;
+	ym[4] = -1;
+	zm[4] = 1;
+	xm[5] = 1;
+	ym[5] = -1;
+	zm[5] = 1;
+	xm[6] = -1;
+	ym[6] = 1;
+	zm[6] = 1;
+	xm[7] = 1;
+	ym[7] = 1;
+	zm[7] = 1;
+
+	int e1[ne], e2[ne];
+	e1[0] = 0;
+	e2[0] = 1;
+	e1[1] = 0;
+	e2[1] = 2;
+	e1[2] = 1;
+	e2[2] = 3;
+	e1[3] = 2;
+	e2[3] = 3;
+	e1[4] = 4;
+	e2[4] = 5;
+	e1[5] = 4;
+	e2[5] = 6;
+	e1[6] = 5;
+	e2[6] = 7;
+	e1[7] = 6;
+	e2[7] = 7;
+	e1[8] = 0;
+	e2[8] = 4;
+	e1[9] = 1;
+	e2[9] = 5;
+	e1[10] = 2;
+	e2[10] = 6;
+	e1[11] = 3;
+	e2[11] = 7;
+
 	for (int n = 0 ; n < len ; n++) {
-		double xo[8], yo[8], zo[8];
-		xo[0] = -size;
-		yo[0] = -size;
-		zo[0] = -size;
-		xo[1] = size;
-		yo[1] = -size;
-		zo[1] = -size;
-		xo[2] = -size;
-		yo[2] = size;
-		zo[2] = -size;
-		xo[3] = size;
-		yo[3] = size;
-		zo[3] = -size;
-		xo[4] = -size;
-		yo[4] = -size;
-		zo[4] = size;
-		xo[5] = size;
-		yo[5] = -size;
-		zo[5] = size;
-		xo[6] = -size;
-		yo[6] = size;
-		zo[6] = size;
-		xo[7] = size;
-		yo[7] = size;
-		zo[7] = size;
+		double xo[np], yo[np], zo[np];
+		for (int i = 0; i < np; i++) {
+			xo[i] = xm[i] * size;
+			yo[i] = ym[i] * size;
+			zo[i] = zm[i] * size;
+		}
 
-		double x3[8], y3[8], z3[8];
-		double xs[8], ys[8];
+		double x3[np], y3[np], z3[np];
+		double xs[np], ys[np];
 
-		for (int i = 0; i < 8; i++) {
+		for (int i = 0; i < np; i++) {
 			double xa, ya, za;
 			double xb, yb, zb;
 			double xc, yc, zc;
@@ -146,21 +181,9 @@ void main() {
 			ys[i] = 88 / 2 * (1 + yc * dist / (dist + zc));
 		}
 
-
-		outputline(outputfile, 1, xs[0], ys[0], xs[1], ys[1]);
-		outputline(outputfile, 0, xs[1], ys[1], xs[3], ys[3]);
-		outputline(outputfile, 0, xs[3], ys[3], xs[2], ys[2]);
-		outputline(outputfile, 0, xs[2], ys[2], xs[0], ys[0]);
-
-		outputline(outputfile, 0, xs[4], ys[4], xs[5], ys[5]);
-		outputline(outputfile, 0, xs[5], ys[5], xs[7], ys[7]);
-		outputline(outputfile, 0, xs[7], ys[7], xs[6], ys[6]);
-		outputline(outputfile, 0, xs[6], ys[6], xs[4], ys[4]);
-
-		outputline(outputfile, 0, xs[0], ys[0], xs[4], ys[4]);
-		outputline(outputfile, 0, xs[1], ys[1], xs[5], ys[5]);
-		outputline(outputfile, 0, xs[2], ys[2], xs[6], ys[6]);
-		outputline(outputfile, 0, xs[3], ys[3], xs[7], ys[7]);
+		for (int i = 0; i < ne; i++) {
+			outputline(outputfile, !i, xs[e1[i]], ys[e1[i]], xs[e2[i]], ys[e2[i]]);
+		}
 	}
 
 	fprintf(outputfile, "EndAnim:\n");
