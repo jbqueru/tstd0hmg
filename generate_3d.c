@@ -87,32 +87,27 @@ void main() {
 		";        ||||||||   ||||||||   ||||||||   ||||||||   ++++++++-"
 			" Bresenham initial offset\n"
 		";        ||||||||   ||||||||   ||||||||   ||||||||   ||||||||\n"
-		"; .dc.b %%flllllll, %%ooddbbbb, %%oooooooo, %%iiiiiiii, %%ssssssss\n"
+		"; .dc.b %%flllllll, %%oovdbbbb, %%oooooooo, %%iiiiiiii, %%ssssssss\n"
 	);
 
-	for (int i = 0; i < 256 ; i++) {
-		fprintf(outputfile, "  .dc.b %%10100000, %%01011111, %%00001011, %d, %%01111111\n", i);
-	}
-
-	for (int n = 0; n < 380; n++) {
+	for (int n = 0; n < 364; n++) {
 		int x1, y1;
 		if (n < 95) {
 			x1 = n;
 			y1 = 0;
-		} else if (n < 190) {
+		} else if (n < 182) {
 			x1 = 95;
 			y1 = n - 95;
-		} else if (n < 285) {
-			x1 = 285 - n;
-			y1 = 95;
+		} else if (n < 277) {
+			x1 = 277 - n;
+			y1 = 87;
 		} else {
 			x1 = 0;
-			y1 = 380 - n;
+			y1 = 364 - n;
 		}
 		int x2, y2;
 		x2 = 40;
 		y2 = 20;
-		printf("(1) from (%d,%d) to (%d,%d)\n", x1, y1, x2, y2);
 		if (x1 > x2) {
 			int t;
 			t = x1;
@@ -122,17 +117,48 @@ void main() {
 			y1 = y2;
 			y2 = t;
 		}
-		printf("(2) from (%d,%d) to (%d,%d)\n", x1, y1, x2, y2);
 		int l, o, d, v, b, i, s;
+		o = y1 * 6 + x1 / 16;
+		b = 15 - (x1 % 16);
+		i = 0;
+		s = 128;
 		if ((y2 - y1) < -(x2 - x1)) {
-			printf("up vertical\n");
+			l = y1 - y2;
+			d = 0;
+			v = 1;
+			i = 256 * (x1 - x2) / (y2 - y1);
 		} else if (y2 <= y1) {
-			printf("up horizontal\n");
+			l = x2 - x1;
+			d = 0;
+			v = 0;
+			i = 256 * (y1 - y2) / (x2 - x1);
 		} else if ((y2 - y1) <= (x2 - x1)) {
-			printf("down horizontal\n");
+			l = x2 - x1;
+			d = 1;
+			v = 0;
+			i = 256 * (y2 - y1) / (x2 - x1);
 		} else {
-			printf("down vertical\n");
+			l = y2 - y1;
+			d = 1;
+			v = 1;
+			i = 256 * (x2 - x1) / (y2 - y1);
 		}
+		if (i > 255) {
+			i = 255;
+		}
+		fprintf(outputfile, "\n\n  .dc.b 95+128, %%00011111, 12, 0, 127\n");
+		fprintf(outputfile, "  .dc.b 95, %%01011111, 254, 0, 127\n");
+		fprintf(outputfile, "  .dc.b 87, %%00111101, 0, 0, 127\n");
+		fprintf(outputfile, "  .dc.b 87, %%00110010, 5, 0, 127\n");
+		fprintf(outputfile, "  .dc.b 95, %%00011111, 0, 234, 127\n\n");
+		fprintf(outputfile, "; (%d,%d)-(%d,%d)\n", x1, y1, x2, y2);
+		fprintf(outputfile, "; l=%d, o=%d, v=%d, d=%d, b=%d, i=%d, s=%d\n", l, o, v, d, b, i, s);
+		fprintf(outputfile, "  .dc.b %d,%d,%d,%d,%d\n",
+		       l,
+		       (o / 256) * 64 + v * 32 + d * 16 + b,
+		       o % 256,
+		       i,
+		       s);
 	}
 
 	fprintf(outputfile, "EndAnim:\n");
