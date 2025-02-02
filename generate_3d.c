@@ -187,6 +187,10 @@ void main() {
 }
 
 void outputline(FILE* outputfile, int first, int x1, int y1, int x2, int y2) {
+	if (x1 < 0 || x1 >= 96 || y1 < 0 || y2 >= 88 || x2 < 0 || x2 >= 96 || y2 < 0 || y2 >= 88) {
+		fprintf(stderr, "3D graphics don't fit in frame\n");
+		exit(1);
+	}
 	if (x1 > x2) {
 		int t;
 		t = x1;
@@ -201,7 +205,12 @@ void outputline(FILE* outputfile, int first, int x1, int y1, int x2, int y2) {
 	b = 15 - (x1 % 16);
 	i = 0;
 	s = 128;
-	if ((y2 - y1) < -(x2 - x1)) {
+	if ((x1 == x2) && (y1 == y2)) {
+		l = 0;
+		d = 0;
+		v = 0;
+		i = 0;
+	} else if ((y2 - y1) < -(x2 - x1)) {
 		l = y1 - y2;
 		d = 0;
 		v = 1;
