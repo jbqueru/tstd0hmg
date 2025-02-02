@@ -28,8 +28,9 @@
 #include <stdlib.h>
 #include <math.h>
 
-const double size = 0.3;
-const double dist = 3 * size;
+const double size = 0.565;
+const double dist = 8 * size;
+const int len = 400;
 
 void outputline(FILE* outputfile, int first, int x1, int y1, int x2, int y2);
 
@@ -95,34 +96,7 @@ void main() {
 		"; .dc.b %%flllllll, %%oovdbbbb, %%oooooooo, %%iiiiiiii, %%ssssssss\n"
 	);
 
-	for (int n = 0; n < 364; n++) {
-		outputline(outputfile, 1, 0, 2, 95, 2);
-		outputline(outputfile, 0, 0, 85, 95, 85);
-		outputline(outputfile, 0, 2, 0, 2, 87);
-		outputline(outputfile, 0, 93, 0, 93, 87);
-		outputline(outputfile, 0, 0, 0, 95, 87);
-		outputline(outputfile, 0, 95, 0, 0, 87);
-		int x1, y1;
-		if (n < 95) {
-			x1 = n;
-			y1 = 0;
-		} else if (n < 182) {
-			x1 = 95;
-			y1 = n - 95;
-		} else if (n < 277) {
-			x1 = 277 - n;
-			y1 = 87;
-		} else {
-			x1 = 0;
-			y1 = 364 - n;
-		}
-		int x2, y2;
-		x2 = 47.5 + 40 * cos(2 * M_PI * n / 364);
-		y2 = 43.5 + 20 * sin(4 * M_PI * n / 364);
-		outputline(outputfile, 0, x1, y1, x2, y2);
-	}
-
-	for (int n = 0 ; n < 200 ; n++) {
+	for (int n = 0 ; n < len ; n++) {
 		double xo[8], yo[8], zo[8];
 		xo[0] = -size;
 		yo[0] = -size;
@@ -153,14 +127,23 @@ void main() {
 		double xs[8], ys[8];
 
 		for (int i = 0; i < 8; i++) {
-			x3[i] = xo[i];
-			y3[i] = yo[i];
-			z3[i] = zo[i];
+			double xa, ya, za;
+			double xb, yb, zb;
+			double xc, yc, zc;
+			xa = xo[i] * cos(n * 2 * M_PI / len) - yo[i] * sin(n * 2 * M_PI / len);
+			ya = xo[i] * sin(n * 2 * M_PI / len) + yo[i] * cos(n * 2 * M_PI / len);
+			za = zo[i];
 
-			xs[i] = 96 / 2 * (1 + x3[i] * dist / (dist + z3[i]));
-			ys[i] = 88 / 2 * (1 + y3[i] * dist / (dist + z3[i]));
+			yb = ya * cos(2 * n * 2 * M_PI / len) - za * sin(2 * n * 2 * M_PI / len);
+			zb = ya * sin(2 * n * 2 * M_PI / len) + za * cos(2 * n * 2 * M_PI / len);
+			xb = xa;
 
-			printf("%f %f\n", xs[i], ys[i]);
+			zc = zb * cos(3 * n * 2 * M_PI / len) - xb * sin(3 * n * 2 * M_PI / len);
+			xc = zb * sin(3 * n * 2 * M_PI / len) + xb * cos(3 * n * 2 * M_PI / len);
+			yc = yb;
+
+			xs[i] = 96 / 2 * (1 + xc * dist / (dist + zc));
+			ys[i] = 88 / 2 * (1 + yc * dist / (dist + zc));
 		}
 
 
