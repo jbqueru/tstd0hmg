@@ -150,6 +150,37 @@ void main() {
 	e1[11] = 3;
 	e2[11] = 7;
 
+	int face[6][4];
+	face[0][0] = 0;
+	face[0][1] = 1;
+	face[0][2] = 2;
+	face[0][3] = 3;
+
+	face[1][0] = 4;
+	face[1][1] = 5;
+	face[1][2] = 6;
+	face[1][3] = 7;
+
+	face[2][0] = 0;
+	face[2][1] = 4;
+	face[2][2] = 8;
+	face[2][3] = 9;
+
+	face[3][0] = 1;
+	face[3][1] = 5;
+	face[3][2] = 8;
+	face[3][3] = 10;
+
+	face[4][0] = 2;
+	face[4][1] = 6;
+	face[4][2] = 9;
+	face[4][3] = 11;
+
+	face[5][0] = 3;
+	face[5][1] = 7;
+	face[5][2] = 10;
+	face[5][3] = 11;
+
 	for (int n = 0 ; n < len ; n++) {
 		double xo[np], yo[np], zo[np];
 		for (int i = 0; i < np; i++) {
@@ -181,8 +212,22 @@ void main() {
 			ys[i] = 88 / 2 * (1 + yc * dist / (dist + zc));
 		}
 
+		int vis[ne];
 		for (int i = 0; i < ne; i++) {
-			outputline(outputfile, !i, xs[e1[i]], ys[e1[i]], xs[e2[i]], ys[e2[i]]);
+			vis[i] = 0;
+		}
+		for (int i = 0; i < 6; i++) {
+			for (int j = 0; j < 4; j++) {
+				vis[face[i][j]] = 1;
+			}
+		}
+
+		int first = 1;
+		for (int i = 0; i < ne; i++) {
+			if (vis[i]) {
+				outputline(outputfile, first, xs[e1[i]], ys[e1[i]], xs[e2[i]], ys[e2[i]]);
+				first = 0;
+			}
 		}
 	}
 

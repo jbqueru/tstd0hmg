@@ -70,6 +70,24 @@ would potentially result in smoother animation (i.e. sub-pixel
 precision for the line positioning). The initial partial pixel
 count for Bresenham might therefore need to be stored as well,
 which would be a 5th byte per line.
+Feb 02 2025: Moving toward a proper cube
+```
+              4
+    4+---------------+5
+    /|              /|
+  8/ |            9/ |
+  /  |    0       /  |
+0+---------------+1  |
+ |   |5          |   |6
+ |   |           |   |
+ |   |           |   |
+1|   |        7  |2  |
+ |  6+-----------|---+7
+ |  /            |  /
+ | /10           | /11
+ |/       3      |/
+2+---------------+3
+```
 
 
 # What's in the package
