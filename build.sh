@@ -33,9 +33,8 @@ cc convert_bitmaps.c -o out/bin/convert_bitmaps || exit $?
 out/bin/convert_bitmaps || exit $?
 
 echo '(*) generate coordinates for 3D graphics'
-cc generate_3d.c -o out/bin/generate_3d || exit $?
+cc generate_3d.c -lm -o out/bin/generate_3d || exit $?
 out/bin/generate_3d || exit $?
-
 
 echo '(*) assemble code'
 rmac -s -p -4 main.s -o out/tos/TSTD0HMG.PRG || exit $?
