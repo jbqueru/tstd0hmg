@@ -34,8 +34,8 @@ DemoStart:
   lea.l VmaxLogo.l, a0
   movea.l gfx_fb_front, a1
   movea.l gfx_fb_back, a2
-  lea 160*34(a1), a1
-  lea 160*34(a2), a2
+;  lea 160*34(a1), a1
+;  lea 160*34(a2), a2
   move.w #20*133-1, d7
 FillScreen:
   movem.w (a0)+, d0-d2
@@ -280,7 +280,7 @@ LineDone:
 
   lea.l LineBuffer.l, a0
   movea.l gfx_fb_back.l, a1
-  lea.l 56*160+6(a1), a1
+  lea.l 112*160+6(a1), a1
   moveq.l #87, d7
 CopyLine:
   movem.w (a0)+, d0-d5
