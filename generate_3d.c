@@ -31,8 +31,8 @@
 const double size = 0.565;
 const double dist = 8 * size;
 const int len = 400;
-const int np = 14;
-const int ne = 12;
+const int np = 18;
+const int ne = 16;
 
 void outputline(FILE* outputfile, int first, int x1, int y1, int x2, int y2);
 
@@ -143,6 +143,19 @@ void main() {
 	ym[13] = 1;
 	zm[13] = 0;
 
+	xm[14] = 1;
+	ym[14] = 0;
+	zm[14] = -1;
+	xm[15] = 0;
+	ym[15] = 1;
+	zm[15] = -1;
+	xm[16] = -1;
+	ym[16] = 0;
+	zm[16] = -1;
+	xm[17] = 0;
+	ym[17] = -1;
+	zm[17] = -1;
+
 	int e1[ne], e2[ne];
 	e1[0] = 0;
 	e2[0] = 1;
@@ -169,7 +182,16 @@ void main() {
 	e1[11] = 3;
 	e2[11] = 7;
 
-	int face[6][4];
+	e1[12] = 14;
+	e2[12] = 15;
+	e1[13] = 15;
+	e2[13] = 16;
+	e1[14] = 16;
+	e2[14] = 17;
+	e1[15] = 17;
+	e2[15] = 14;
+
+	int face[7][4];
 	face[0][0] = 0;
 	face[0][1] = 1;
 	face[0][2] = 2;
@@ -200,13 +222,19 @@ void main() {
 	face[5][2] = 10;
 	face[5][3] = 11;
 
-	int norm[6];
+	face[6][0] = 12;
+	face[6][1] = 13;
+	face[6][2] = 14;
+	face[6][3] = 15;
+
+	int norm[7];
 	norm[0] = 8;
 	norm[1] = 9;
 	norm[2] = 10;
 	norm[3] = 11;
 	norm[4] = 12;
 	norm[5] = 13;
+	norm[6] = 8;
 
 	for (int n = 0 ; n < len ; n++) {
 		double xo[np], yo[np], zo[np];
@@ -242,7 +270,7 @@ void main() {
 		for (int i = 0; i < ne; i++) {
 			vis[i] = 0;
 		}
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < 7; i++) {
 			double prod =
 					x3[norm[i]] * x3[e1[face[i][0]]]
 					+
