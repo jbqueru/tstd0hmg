@@ -31,8 +31,9 @@
 const double size = 0.565;
 const double dist = 8 * size;
 const int len = 400;
-const int np = 18;
+const int np = 26;
 const int ne = 16;
+const int nf = 7;
 
 void outputline(FILE* outputfile, int first, int x1, int y1, int x2, int y2);
 
@@ -156,6 +157,32 @@ void main() {
 	ym[17] = -1;
 	zm[17] = -1;
 
+	xm[18] = 1;
+	ym[18] = 1;
+	zm[18] = 0;
+	xm[19] = -1;
+	ym[19] = 1;
+	zm[19] = 0;
+	xm[20] = -1;
+	ym[20] = -1;
+	zm[20] = 0;
+	xm[21] = 1;
+	ym[21] = -1;
+	zm[21] = 0;
+
+	xm[22] = 1;
+	ym[22] = 0;
+	zm[22] = 1;
+	xm[23] = 0;
+	ym[23] = 1;
+	zm[23] = 1;
+	xm[24] = -1;
+	ym[24] = 0;
+	zm[24] = 1;
+	xm[25] = 0;
+	ym[25] = -1;
+	zm[25] = 1;
+
 	int e1[ne], e2[ne];
 	e1[0] = 0;
 	e2[0] = 1;
@@ -191,7 +218,7 @@ void main() {
 	e1[15] = 17;
 	e2[15] = 14;
 
-	int face[7][4];
+	int face[nf][4];
 	face[0][0] = 0;
 	face[0][1] = 1;
 	face[0][2] = 2;
@@ -270,7 +297,7 @@ void main() {
 		for (int i = 0; i < ne; i++) {
 			vis[i] = 0;
 		}
-		for (int i = 0; i < 7; i++) {
+		for (int i = 0; i < nf; i++) {
 			double prod =
 					x3[norm[i]] * x3[e1[face[i][0]]]
 					+
