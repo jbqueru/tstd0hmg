@@ -32,7 +32,7 @@ unsigned char pi1[32034];
 
 unsigned char rawpixels[320][200];
 
-unsigned char logo[320 / 2 * 131];
+unsigned char logo[32000];
 
 void main() {
 	FILE* inputfile;
@@ -79,7 +79,7 @@ void main() {
 		exit(1);
 	}
 
-	for (int i = 0; i < 320 / 2 * 131; i++) {
+	for (int i = 0; i < 32000; i++) {
 		logo[i] = 0;
 	}
 
@@ -104,6 +104,77 @@ void main() {
 
 	outputfile = fopen("out/inc/vmax_palette.bin", "wb");
 	fwrite(pi1 + 2, 2, 8, outputfile);
+	fclose(outputfile);
+
+	inputfile = fopen("MBVMAX.PI1", "rb");
+	fread(pi1, 1, 32034, inputfile);
+	fclose(inputfile);
+
+	for (int y = 0; y < 200; y++) {
+		for (int x = 0; x < 320; x++) {
+			int byteoffset = 34;
+			byteoffset += (x / 16) * 8;
+			byteoffset += (x / 8) % 2;
+			byteoffset += y * 160;
+
+			int bitoffset = 7 - (x % 8);
+
+			rawpixels[x][y] =
+				(((pi1[byteoffset] >> bitoffset) & 1)) +
+				(((pi1[byteoffset + 2] >> bitoffset) & 1) * 2) +
+				(((pi1[byteoffset + 4] >> bitoffset) & 1) * 4) +
+				(((pi1[byteoffset + 6] >> bitoffset) & 1) * 8);
+		}
+	}
+
+	xmin = 320;
+	xmax = -1;
+	ymin = 200;
+	ymax = -1;
+	for (int x = 0; x < 320; x++) {
+		for (int y = 0; y < 200; y++) {
+			if (rawpixels[x][y]) {
+				if (x < xmin) xmin = x;
+				if (x > xmax) xmax = x;
+				if (y < ymin) ymin = y;
+				if (y > ymax) ymax = y;
+			}
+		}
+	}
+	if (xmin != 41 || xmax != 278 || ymin != 30 || ymax != 155) {
+		printf("Unexpected logo size (%d,%d)-(%d,%d) (expected (41,30)-(278,155))\n",
+			xmin, ymin, xmax, ymax);
+		exit(1);
+	}
+
+	for (int i = 0; i < 32000; i++) {
+		logo[i] = 0;
+	}
+
+	for (int y = 0; y < 126; y++) {
+		for (int x = 0; x < 320; x++) {
+			unsigned int c = rawpixels[x + 0][y + 30];
+			if (c & 1) {
+				logo[(x / 16) * 8 + (x & 8) / 8 + y * 160 + 0] |= (0x80 >> (x & 7));
+			}
+			if (c & 2) {
+				logo[(x / 16) * 8 + (x & 8) / 8 + y * 160 + 2] |= (0x80 >> (x & 7));
+			}
+			if (c & 4) {
+				logo[(x / 16) * 8 + (x & 8) / 8 + y * 160 + 4] |= (0x80 >> (x & 7));
+			}
+			if (c & 8) {
+				logo[(x / 16) * 8 + (x & 8) / 8 + y * 160 + 6] |= (0x80 >> (x & 7));
+			}
+		}
+	}
+
+	outputfile = fopen("out/inc/mb_bitmap.bin", "wb");
+	fwrite(logo, 1, 160 * 126, outputfile);
+	fclose(outputfile);
+
+	outputfile = fopen("out/inc/mb_palette.bin", "wb");
+	fwrite(pi1 + 2, 2, 16, outputfile);
 	fclose(outputfile);
 
 }

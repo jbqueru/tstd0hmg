@@ -31,26 +31,46 @@ DemoStart:
   move.l #VmaxMusicStart, MusicPlay.l
   move.l #AnimXY, XYRead.l
 
+  lea.l MBLogo.l, a0
+  movea.l gfx_fb_front, a1
+  lea.l 32*160(a1), a1
+  move.w #160*126-1, d7
+CopyLogo:
+  move.b (a0)+, (a1)+
+  dbra.w d7, CopyLogo.l
+  movem.l MBPalette.l, d0-d7
+  movem.l d0-d7, $ffff8240.w
+
+  moveq.l #127, d7
+InitWait:
+  stop #$2300
+  dbra.w d7, InitWait.l
+
   lea.l VmaxLogo.l, a0
   movea.l gfx_fb_front, a1
   movea.l gfx_fb_back, a2
-;  lea 160*34(a1), a1
-;  lea 160*34(a2), a2
   move.w #20*131-1, d7
 FillScreen:
   movem.w (a0)+, d0-d2
   move.w d0, (a1)+
   move.w d1, (a1)+
   move.w d2, (a1)+
-  addq.l #2, a1
+  clr.w (a1)+
   move.w d0, (a2)+
   move.w d1, (a2)+
   move.w d2, (a2)+
-  addq.l #2, a2
+  clr.w (a2)+
   dbra.w d7, FillScreen.l
+  move.w #20*68-1, d7
+ClearScreen:
+  clr.w (a1)+
+  clr.w (a1)+
+  clr.w (a1)+
+  clr.w (a1)+
+  dbra.w d7, ClearScreen.l
 
   movem.l VmaxPalette.l, d0-d3
-  move.l #$6740674, d4
+  move.l #$5550555, d4
   move.l d4, d5
   move.l d4, d6
   move.l d4, d7
@@ -328,6 +348,10 @@ VmaxLogo:
   .incbin "out/inc/vmax_bitmap.bin"
 VmaxPalette:
   .incbin "out/inc/vmax_palette.bin"
+MBLogo:
+  .incbin "out/inc/mb_bitmap.bin"
+MBPalette:
+  .incbin "out/inc/mb_palette.bin"
 
 VmaxMusicStart:
   .incbin "AREGDUMP.BIN"
