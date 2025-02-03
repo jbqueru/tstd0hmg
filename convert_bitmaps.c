@@ -32,7 +32,7 @@ unsigned char pi1[32034];
 
 unsigned char rawpixels[320][200];
 
-unsigned char logo[320 / 2 * 133];
+unsigned char logo[320 / 2 * 131];
 
 void main() {
 	FILE* inputfile;
@@ -73,19 +73,19 @@ void main() {
 			}
 		}
 	}
-	if (xmin != 3 || xmax != 317 || ymin != 26 || ymax != 158) {
-		printf("Unexpected logo size (%d,%d)-(%d,%d) (expected (3,33)-(317,165))\n",
+	if (xmin != 3 || xmax != 317 || ymin != 35 || ymax != 165) {
+		printf("Unexpected logo size (%d,%d)-(%d,%d) (expected (3,35)-(317,165))\n",
 			xmin, ymin, xmax, ymax);
 		exit(1);
 	}
 
-	for (int i = 0; i < 320 / 2 * 133; i++) {
+	for (int i = 0; i < 320 / 2 * 131; i++) {
 		logo[i] = 0;
 	}
 
-	for (int y = 0; y < 133; y++) {
+	for (int y = 0; y < 131; y++) {
 		for (int x = 0; x < 320; x++) {
-			unsigned int c = rawpixels[x + 0][y + 26];
+			unsigned int c = rawpixels[x + 0][y + 35];
 			if (c & 1) {
 				logo[(x / 16) * 6 + (x & 8) / 8 + y * 120 + 0] |= (0x80 >> (x & 7));
 			}
@@ -99,7 +99,7 @@ void main() {
 	}
 
 	outputfile = fopen("out/inc/vmax_bitmap.bin", "wb");
-	fwrite(logo, 1, 120 * 133, outputfile);
+	fwrite(logo, 1, 120 * 131, outputfile);
 	fclose(outputfile);
 
 	outputfile = fopen("out/inc/vmax_palette.bin", "wb");

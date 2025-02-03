@@ -36,7 +36,7 @@ DemoStart:
   movea.l gfx_fb_back, a2
 ;  lea 160*34(a1), a1
 ;  lea 160*34(a2), a2
-  move.w #20*133-1, d7
+  move.w #20*131-1, d7
 FillScreen:
   movem.w (a0)+, d0-d2
   move.w d0, (a1)+
