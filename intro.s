@@ -24,28 +24,43 @@
 
 ; See main.s for more information
 
+; #############################################################################
+; #############################################################################
+; ####                                                                     ####
+; ####                                                                     ####
+; ####                                Intro                                ####
+; ####                                                                     ####
+; ####                                                                     ####
+; #############################################################################
+; #############################################################################
+
   .text
 Intro:
-  lea.l MBLogo.l, a0
+  lea.l IntroLogo.l, a0
   movea.l gfx_fb_front, a1
-  lea.l 32*160(a1), a1
-  move.w #160*126-1, d7
-CopyLogo:
-  move.b (a0)+, (a1)+
-  dbra.w d7, CopyLogo.l
-  movem.l MBPalette.l, d0-d7
-  movem.l d0-d7, $ffff8240.w
+  movea.l gfx_fb_back, a2
+  lea.l 37*160(a1), a1
+  lea.l 37*160(a2), a2
+  move.w #40*126-1, d7
+.CopyLogo:
+  move.l (a0)+, d0
+  move.l d0, (a1)+
+  move.l d0, (a2)+
+  dbra.w d7, .CopyLogo.l
 
-  moveq.l #127, d7
-InitWait:
+  movem.l IntroPalette.l, d0-d7
+  movem.l d0-d7, GFX_PALETTE.w
+
+  move.l #450, d7
+.Wait:
   stop #$2300
-  dbra.w d7, InitWait.l
+  dbra.w d7, .Wait.l
 
   rts
 
   .data
   .even
-MBLogo:
+IntroLogo:
   .incbin "out/inc/mb_bitmap.bin"
-MBPalette:
+IntroPalette:
   .incbin "out/inc/mb_palette.bin"
