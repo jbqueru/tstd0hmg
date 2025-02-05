@@ -25,11 +25,21 @@
 ; See main.s for more information
 
   .text
-
 DemoStart:
-  move.l #VBL, VECTOR_VBL.w
+
+; ##############################
+; ##############################
+; ##                          ##
+; ##   Music Initialization   ##
+; ##                          ##
+; ##############################
+; ##############################
+
   move.l #VmaxMusicStart, MusicPlay.l
-  move.l #AnimXY, XYRead.l
+  move.l #VBL, VECTOR_VBL.w
+
+
+
 
   lea.l MBLogo.l, a0
   movea.l gfx_fb_front, a1
@@ -45,6 +55,8 @@ CopyLogo:
 InitWait:
   stop #$2300
   dbra.w d7, InitWait.l
+
+  move.l #AnimXY, XYRead.l
 
   lea.l VmaxLogo.l, a0
   movea.l gfx_fb_front, a1
@@ -69,6 +81,7 @@ ClearScreen:
   clr.w (a1)+
   dbra.w d7, ClearScreen.l
 
+
   movem.l VmaxPalette.l, d0-d3
   move.l #$5550555, d4
   move.l d4, d5
@@ -87,19 +100,6 @@ MainLoop:
   move.b d0, $ffff8203.w
   swap d0
   move.b d0, $ffff8201.w
-
-; Play music
-  movea.l MusicPlay.l, a0
-  moveq.l #13, d7
-.CopyReg:
-  move.b d7, PSG_REG.w
-  move.b (a0)+, PSG_WRITE.w
-  dbra.w d7, .CopyReg.l
-  cmpa.l #VmaxMusicEnd, a0
-  bne.s .MusicOk.l
-  lea.l VmaxMusicRestart, a0
-.MusicOk:
-  move.l a0, MusicPlay.l
 
 ; Clear offscreen buffer
   lea.l LineBufferEnd.l, a6
@@ -336,10 +336,26 @@ CopyLine:
   cmp.b #$39, $fffffc02.w
   bne.w MainLoop.l
 
+  move.l #_IrqVblEmpty, VECTOR_VBL.w
+
   rts
 
 VBL:
-  rte
+  movem.l d7/a0, -(sp)
+  ; Play music
+  movea.l MusicPlay.l, a0
+  moveq.l #13, d7
+.CopyReg:
+  move.b d7, PSG_REG.w
+  move.b (a0)+, PSG_WRITE.w
+  dbra.w d7, .CopyReg.l
+  cmpa.l #VmaxMusicEnd, a0
+  bne.s .MusicOk.l
+  lea.l VmaxMusicRestart, a0
+.MusicOk:
+  move.l a0, MusicPlay.l
+  movem.l (sp)+, d7/a0
+  jmp _IrqVblEmpty
 
 ; ##############################################33
   .data
