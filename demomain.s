@@ -38,23 +38,7 @@ DemoStart:
   move.l #VmaxMusicStart, MusicPlay.l
   move.l #VBL, VECTOR_VBL.w
 
-
-
-
-  lea.l MBLogo.l, a0
-  movea.l gfx_fb_front, a1
-  lea.l 32*160(a1), a1
-  move.w #160*126-1, d7
-CopyLogo:
-  move.b (a0)+, (a1)+
-  dbra.w d7, CopyLogo.l
-  movem.l MBPalette.l, d0-d7
-  movem.l d0-d7, $ffff8240.w
-
-  moveq.l #127, d7
-InitWait:
-  stop #$2300
-  dbra.w d7, InitWait.l
+  bsr.w Intro
 
   move.l #AnimXY, XYRead.l
 
@@ -364,10 +348,6 @@ VmaxLogo:
   .incbin "out/inc/vmax_bitmap.bin"
 VmaxPalette:
   .incbin "out/inc/vmax_palette.bin"
-MBLogo:
-  .incbin "out/inc/mb_bitmap.bin"
-MBPalette:
-  .incbin "out/inc/mb_palette.bin"
 
 VmaxMusicStart:
   .incbin "AREGDUMP.BIN"
@@ -386,3 +366,5 @@ XYRead:
   .ds.l 1
 MusicPlay:
   .ds.l 1
+
+  .include "intro.s"
