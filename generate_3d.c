@@ -31,9 +31,9 @@
 const double size = 0.565;
 const double dist = 8 * size;
 const int len = 400;
-const int np = 18;
+const int np = 26;
 const int ne = 24;
-const int nf = 6;
+const int nf = 14;
 
 void outputline(FILE* outputfile, int first, int x1, int y1, int x2, int y2);
 
@@ -172,6 +172,38 @@ void main() {
 	ym[17] = 0;
 	zm[17] = 1;
 
+	xm[18] = 1;
+	ym[18] = 1;
+	zm[18] = -1;
+
+	xm[19] = -1;
+	ym[19] = 1;
+	zm[19] = -1;
+
+	xm[20] = -1;
+	ym[20] = -1;
+	zm[20] = -1;
+
+	xm[21] = 1;
+	ym[21] = -1;
+	zm[21] = -1;
+
+	xm[22] = 1;
+	ym[22] = 1;
+	zm[22] = 1;
+
+	xm[23] = -1;
+	ym[23] = 1;
+	zm[23] = 1;
+
+	xm[24] = -1;
+	ym[24] = -1;
+	zm[24] = 1;
+
+	xm[25] = 1;
+	ym[25] = -1;
+	zm[25] = 1;
+
 	int e1[ne], e2[ne];
 	e1[0] = 0;
 	e2[0] = 1;
@@ -276,6 +308,46 @@ void main() {
 	face[5][2] = 22;
 	face[5][3] = 23;
 
+	face[6][0] = 0;
+	face[6][1] = 4;
+	face[6][2] = 5;
+	face[6][3] = -1;
+
+	face[7][0] = 1;
+	face[7][1] = 6;
+	face[7][2] = 7;
+	face[7][3] = -1;
+
+	face[8][0] = 2;
+	face[8][1] = 8;
+	face[8][2] = 9;
+	face[8][3] = -1;
+
+	face[9][0] = 3;
+	face[9][1] = 10;
+	face[9][2] = 11;
+	face[9][3] = -1;
+
+	face[10][0] = 12;
+	face[10][1] = 13;
+	face[10][2] = 20;
+	face[10][3] = -1;
+
+	face[11][0] = 14;
+	face[11][1] = 15;
+	face[11][2] = 21;
+	face[11][3] = -1;
+
+	face[12][0] = 16;
+	face[12][1] = 17;
+	face[12][2] = 22;
+	face[12][3] = -1;
+
+	face[13][0] = 18;
+	face[13][1] = 19;
+	face[13][2] = 23;
+	face[13][3] = -1;
+
 	int norm[nf];
 	norm[0] = 12;
 	norm[1] = 13;
@@ -283,6 +355,14 @@ void main() {
 	norm[3] = 15;
 	norm[4] = 16;
 	norm[5] = 17;
+	norm[6] = 18;
+	norm[7] = 19;
+	norm[8] = 20;
+	norm[9] = 21;
+	norm[10] = 22;
+	norm[11] = 23;
+	norm[12] = 24;
+	norm[13] = 25;
 
 	for (int n = 0 ; n < len ; n++) {
 		double xo[np], yo[np], zo[np];
@@ -327,7 +407,9 @@ void main() {
 					z3[norm[i]] * (dist + z3[e1[face[i][0]]]);
 			if (prod < 0) {
 				for (int j = 0; j < 4; j++) {
-					vis[face[i][j]] = 1;
+					if (face[i][j] >= 0) {
+						vis[face[i][j]] = 1;
+					}
 				}
 			}
 		}
