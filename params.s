@@ -34,7 +34,17 @@
 ; #############################################################################
 ; #############################################################################
 
+DEBUG		.equ	0
+
 STACK_SIZE	.equ	256		; in long words
 STACK_GUARD	.equ	$60C0FFEE
 
+ANIM_COLOR	.equ	$565
+
+.if DEBUG
+INTRO_DURATION	.equ	25
+ANIM_TIMING_BARS .equ	1
+.else
 INTRO_DURATION	.equ	450
+ANIM_TIMING_BARS .equ	0
+.endif

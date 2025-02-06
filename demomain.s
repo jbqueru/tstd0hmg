@@ -75,7 +75,7 @@ ClearScreen:
 
 
   movem.l VmaxPalette.l, d0-d3
-  move.l #$5550555, d4
+  move.l #ANIM_COLOR * $10001, d4
   move.l d4, d5
   move.l d4, d6
   move.l d4, d7
@@ -111,10 +111,12 @@ MainLoop:
   movem.l d0-d7/a0-a3, -(a6)
   .endr
 
-moveq.l #17, d7
+.if ANIM_TIMING_BARS
+  moveq.l #17, d7
 .TimeLine0:
   not.w $ffff8240.w
   dbra.w d7, .TimeLine0.l
+.endif
 
 
 ; Draw lines into offscreen buffer
@@ -285,10 +287,12 @@ LineDone:
 .AnimOK:
   move.l a6, XYRead
 
+.if ANIM_TIMING_BARS
   moveq.l #17, d7
 .TimeLine1:
   not.w $ffff8240.w
   dbra.w d7, .TimeLine1.l
+.endif
 
   lea.l LineBuffer.l, a0
   movea.l gfx_fb_back.l, a1
@@ -320,10 +324,12 @@ CopyLine:
   lea.l 160(a1), a1
   dbra.w d7, CopyLine.l
 
+.if ANIM_TIMING_BARS
   moveq.l #17, d7
 .TimeLine2:
   not.w $ffff8240.w
   dbra.w d7, .TimeLine2.l
+.endif
 
   cmp.b #$39, $fffffc02.w
   bne.w MainLoop.l
