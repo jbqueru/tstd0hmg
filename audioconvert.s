@@ -70,7 +70,7 @@ MainSup:
 
 ; Music length:
 ; 8 patterns 64 * 7
-	move.w	#3583, d0
+	move.w	#9 * 64 * 7 -1, d0
 	lea.l	RegDump, a0
 PlayMusic:
 	movem.l	d0/a0, -(sp)
@@ -102,6 +102,6 @@ FileName:
 FileHandle:
 	ds.w	1
 RegDump:
-	ds.b	3584 * 14
+	ds.b	9 * 64 * 7 * 14
 
 	.end

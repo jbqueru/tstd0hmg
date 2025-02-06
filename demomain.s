@@ -366,7 +366,7 @@ VmaxPalette:
 VmaxMusicStart:
   .incbin "AREGDUMP.BIN"
 VmaxMusicEnd:
-VmaxMusicRestart .equ VmaxMusicStart + 14 * 7 * 64 * 2
+VmaxMusicRestart .equ VmaxMusicStart + 14 * 7 * 64 * 3
 
   .include "out/inc/3d.inc"
 
