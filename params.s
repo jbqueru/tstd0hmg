@@ -36,3 +36,5 @@
 
 STACK_SIZE	.equ	256		; in long words
 STACK_GUARD	.equ	$60C0FFEE
+
+INTRO_DURATION	.equ	450

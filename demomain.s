@@ -39,6 +39,10 @@ DemoStart:
   move.l #VBL, VECTOR_VBL.w
 
   bsr.w Intro
+  tst.w d0
+  beq.s .DoAnim
+  rts
+.DoAnim:
 
   move.l #AnimXY, XYRead.l
 

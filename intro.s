@@ -51,11 +51,17 @@ Intro:
   movem.l IntroPalette.l, d0-d7
   movem.l d0-d7, GFX_PALETTE.w
 
-  move.l #450, d7
+  move.w #INTRO_DURATION, d7
 .Wait:
   stop #$2300
+  cmp.b #$39, $fffffc02.w
+  bne.s .KeepGoing.l
+  moveq.l #1, d0
+  rts
+.KeepGoing:
   dbra.w d7, .Wait.l
 
+  moveq.l #0, d0
   rts
 
   .data
