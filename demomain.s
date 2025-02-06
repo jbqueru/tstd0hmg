@@ -63,6 +63,10 @@ ClearScreen:
   clr.w (a1)+
   clr.w (a1)+
   clr.w (a1)+
+  clr.w (a2)+
+  clr.w (a2)+
+  clr.w (a2)+
+  clr.w (a2)+
   dbra.w d7, ClearScreen.l
 
 
