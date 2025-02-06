@@ -124,6 +124,10 @@ y
 |/
 +------> x
 ```
+Feb 05 2025: We've agreed that timing might be tight, so we'll aim for
+an initial release by the deadline, followed by a fuller one when we have
+time to polish it.
+
 
 # What's in the package
 

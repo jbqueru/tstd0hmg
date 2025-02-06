@@ -28,12 +28,13 @@
 #include <stdlib.h>
 #include <math.h>
 
-const double size = 0.565;
+const double size = 0.696;
 const double dist = 8 * size;
-const int len = 400;
-const int np = 26;
-const int ne = 24;
+const int len = 448;
+const int np = 38;
+const int ne = 34;
 const int nf = 14;
+const int epf = 14;
 
 void outputline(FILE* outputfile, int first, int x1, int y1, int x2, int y2);
 
@@ -204,6 +205,54 @@ void main() {
 	ym[25] = -1;
 	zm[25] = 1;
 
+	xm[26] = xm[0] + 0.1 * (xm[3] - xm[0]) + 0.7 * (xm[1] - xm[0]);
+	ym[26] = ym[0] + 0.1 * (ym[3] - ym[0]) + 0.7 * (ym[1] - ym[0]);
+	zm[26] = zm[0] + 0.1 * (zm[3] - zm[0]) + 0.7 * (zm[1] - zm[0]);
+
+	xm[27] = xm[0] + 0.1 * (xm[3] - xm[0]) + 0.3 * (xm[1] - xm[0]);
+	ym[27] = ym[0] + 0.1 * (ym[3] - ym[0]) + 0.3 * (ym[1] - ym[0]);
+	zm[27] = zm[0] + 0.1 * (zm[3] - zm[0]) + 0.3 * (zm[1] - zm[0]);
+
+	xm[28] = xm[0] + 0.25 * (xm[3] - xm[0]) + 0.45 * (xm[1] - xm[0]);
+	ym[28] = ym[0] + 0.25 * (ym[3] - ym[0]) + 0.45 * (ym[1] - ym[0]);
+	zm[28] = zm[0] + 0.25 * (zm[3] - zm[0]) + 0.45 * (zm[1] - zm[0]);
+
+	xm[29] = xm[0] + 0.4 * (xm[3] - xm[0]) + 0.3 * (xm[1] - xm[0]);
+	ym[29] = ym[0] + 0.4 * (ym[3] - ym[0]) + 0.3 * (ym[1] - ym[0]);
+	zm[29] = zm[0] + 0.4 * (zm[3] - zm[0]) + 0.3 * (zm[1] - zm[0]);
+
+	xm[30] = xm[0] + 0.4 * (xm[3] - xm[0]) + 0.7 * (xm[1] - xm[0]);
+	ym[30] = ym[0] + 0.4 * (ym[3] - ym[0]) + 0.7 * (ym[1] - ym[0]);
+	zm[30] = zm[0] + 0.4 * (zm[3] - zm[0]) + 0.7 * (zm[1] - zm[0]);
+
+	xm[31] = xm[0] + 0.6 * (xm[3] - xm[0]) + 0.3 * (xm[1] - xm[0]);
+	ym[31] = ym[0] + 0.6 * (ym[3] - ym[0]) + 0.3 * (ym[1] - ym[0]);
+	zm[31] = zm[0] + 0.6 * (zm[3] - zm[0]) + 0.3 * (zm[1] - zm[0]);
+
+	xm[32] = xm[0] + 0.8 * (xm[3] - xm[0]) + 0.3 * (xm[1] - xm[0]);
+	ym[32] = ym[0] + 0.8 * (ym[3] - ym[0]) + 0.3 * (ym[1] - ym[0]);
+	zm[32] = zm[0] + 0.8 * (zm[3] - zm[0]) + 0.3 * (zm[1] - zm[0]);
+
+	xm[33] = xm[0] + 0.8 * (xm[3] - xm[0]) + 0.5 * (xm[1] - xm[0]);
+	ym[33] = ym[0] + 0.8 * (ym[3] - ym[0]) + 0.5 * (ym[1] - ym[0]);
+	zm[33] = zm[0] + 0.8 * (zm[3] - zm[0]) + 0.5 * (zm[1] - zm[0]);
+
+	xm[34] = xm[0] + 0.9 * (xm[3] - xm[0]) + 0.5 * (xm[1] - xm[0]);
+	ym[34] = ym[0] + 0.9 * (ym[3] - ym[0]) + 0.5 * (ym[1] - ym[0]);
+	zm[34] = zm[0] + 0.9 * (zm[3] - zm[0]) + 0.5 * (zm[1] - zm[0]);
+
+	xm[35] = xm[0] + 0.9 * (xm[3] - xm[0]) + 0.7 * (xm[1] - xm[0]);
+	ym[35] = ym[0] + 0.9 * (ym[3] - ym[0]) + 0.7 * (ym[1] - ym[0]);
+	zm[35] = zm[0] + 0.9 * (zm[3] - zm[0]) + 0.7 * (zm[1] - zm[0]);
+
+	xm[36] = xm[0] + 0.6 * (xm[3] - xm[0]) + 0.7 * (xm[1] - xm[0]);
+	ym[36] = ym[0] + 0.6 * (ym[3] - ym[0]) + 0.7 * (ym[1] - ym[0]);
+	zm[36] = zm[0] + 0.6 * (zm[3] - zm[0]) + 0.7 * (zm[1] - zm[0]);
+
+	xm[37] = xm[0] + 0.6 * (xm[3] - xm[0]) + 0.5 * (xm[1] - xm[0]);
+	ym[37] = ym[0] + 0.6 * (ym[3] - ym[0]) + 0.5 * (ym[1] - ym[0]);
+	zm[37] = zm[0] + 0.6 * (zm[3] - zm[0]) + 0.5 * (zm[1] - zm[0]);
+
 	int e1[ne], e2[ne];
 	e1[0] = 0;
 	e2[0] = 1;
@@ -277,11 +326,57 @@ void main() {
 	e1[23] = 11;
 	e2[23] = 8;
 
-	int face[nf][4];
+	e1[24] = 26;
+	e2[24] = 27;
+
+	e1[25] = 27;
+	e2[25] = 28;
+
+	e1[26] = 28;
+	e2[26] = 29;
+
+	e1[27] = 29;
+	e2[27] = 30;
+
+	e1[28] = 31;
+	e2[28] = 32;
+
+	e1[29] = 32;
+	e2[29] = 33;
+
+	e1[30] = 34;
+	e2[30] = 35;
+
+	e1[31] = 35;
+	e2[31] = 36;
+
+	e1[32] = 36;
+	e2[32] = 31;
+
+	e1[33] = 37;
+	e2[33] = 34;
+
+	int face[nf][epf];
+
+	for (int i = 0; i < nf; i++) {
+		for (int j = 0; j < epf; j++) {
+			face[i][j] = -1;
+		}
+	}
 	face[0][0] = 0;
 	face[0][1] = 1;
 	face[0][2] = 2;
 	face[0][3] = 3;
+	face[0][4] = 24;
+	face[0][5] = 25;
+	face[0][6] = 26;
+	face[0][7] = 27;
+	face[0][8] = 28;
+	face[0][9] = 29;
+	face[0][10] = 30;
+	face[0][11] = 31;
+	face[0][12] = 32;
+	face[0][13] = 33;
 
 	face[1][0] = 4;
 	face[1][1] = 12;
@@ -311,42 +406,34 @@ void main() {
 	face[6][0] = 0;
 	face[6][1] = 4;
 	face[6][2] = 5;
-	face[6][3] = -1;
 
 	face[7][0] = 1;
 	face[7][1] = 6;
 	face[7][2] = 7;
-	face[7][3] = -1;
 
 	face[8][0] = 2;
 	face[8][1] = 8;
 	face[8][2] = 9;
-	face[8][3] = -1;
 
 	face[9][0] = 3;
 	face[9][1] = 10;
 	face[9][2] = 11;
-	face[9][3] = -1;
 
 	face[10][0] = 12;
 	face[10][1] = 13;
 	face[10][2] = 20;
-	face[10][3] = -1;
 
 	face[11][0] = 14;
 	face[11][1] = 15;
 	face[11][2] = 21;
-	face[11][3] = -1;
 
 	face[12][0] = 16;
 	face[12][1] = 17;
 	face[12][2] = 22;
-	face[12][3] = -1;
 
 	face[13][0] = 18;
 	face[13][1] = 19;
 	face[13][2] = 23;
-	face[13][3] = -1;
 
 	int norm[nf];
 	norm[0] = 12;
@@ -378,20 +465,20 @@ void main() {
 		for (int i = 0; i < np; i++) {
 			double xa, ya, za;
 			double xb, yb, zb;
-			xa = xo[i] * cos(n * 2 * M_PI / len) - yo[i] * sin(n * 2 * M_PI / len);
-			ya = xo[i] * sin(n * 2 * M_PI / len) + yo[i] * cos(n * 2 * M_PI / len);
+			xa = xo[i] * cos(3 * (n + 60) * 2 * M_PI / len) - yo[i] * sin(3 * (n + 60) * 2 * M_PI / len);
+			ya = xo[i] * sin(3 * (n + 60) * 2 * M_PI / len) + yo[i] * cos(3 * (n + 60) * 2 * M_PI / len);
 			za = zo[i];
 
 			yb = ya * cos(2 * n * 2 * M_PI / len) - za * sin(2 * n * 2 * M_PI / len);
 			zb = ya * sin(2 * n * 2 * M_PI / len) + za * cos(2 * n * 2 * M_PI / len);
 			xb = xa;
 
-			z3[i] = zb * cos(3 * n * 2 * M_PI / len) - xb * sin(3 * n * 2 * M_PI / len);
-			x3[i] = zb * sin(3 * n * 2 * M_PI / len) + xb * cos(3 * n * 2 * M_PI / len);
+			z3[i] = zb * cos(1 * n * 2 * M_PI / len) - xb * sin(1 * n * 2 * M_PI / len);
+			x3[i] = zb * sin(1 * n * 2 * M_PI / len) + xb * cos(1 * n * 2 * M_PI / len);
 			y3[i] = yb;
 
 			xs[i] = 96 / 2 * (1 + x3[i] * dist / (dist + z3[i]));
-			ys[i] = 88 / 2 * (1 + y3[i] * dist / (dist + z3[i]));
+			ys[i] = 88 / 2 * (1 - y3[i] * dist / (dist + z3[i]));
 		}
 
 		int vis[ne];
@@ -406,7 +493,7 @@ void main() {
 					+
 					z3[norm[i]] * (dist + z3[e1[face[i][0]]]);
 			if (prod < 0) {
-				for (int j = 0; j < 4; j++) {
+				for (int j = 0; j < epf; j++) {
 					if (face[i][j] >= 0) {
 						vis[face[i][j]] = 1;
 					}
