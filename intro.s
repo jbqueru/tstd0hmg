@@ -40,38 +40,69 @@ Intro:
   movem.l IntroPalette.l, d0-d7
   movem.l d0-d7, GFX_PALETTE.w
 
+IntroLoop:
   lea.l IntroLogo.l, a0
-  movea.l gfx_fb_front, a1
-  movea.l gfx_fb_back, a2
+  movea.l gfx_fb_back, a1
   lea.l 16 + 30 * 160(a1), a1
-  lea.l 16 + 30 * 160(a2), a2
-  moveq.l #127, d7
-.CopyLogo:
-  movem.l (a0)+, d0-d6/a6
-  movem.l d0-d6/a6, (a1)
-  movem.l d0-d6/a6, (a2)
-  movem.l (a0)+, d0-d6/a6
-  movem.l d0-d6/a6, 32(a1)
-  movem.l d0-d6/a6, 32(a2)
-  movem.l (a0)+, d0-d6/a6
-  movem.l d0-d6/a6, 64(a1)
-  movem.l d0-d6/a6, 64(a2)
-  movem.l (a0)+, d0-d6/a6
-  movem.l d0-d6/a6, 96(a1)
-  movem.l d0-d6/a6, 96(a2)
-  lea.l 160(a1), a1
-  lea.l 160(a2), a2
-  dbra.w d7, .CopyLogo.l
 
-  move.w #INTRO_DURATION, d7
-.Wait:
+  moveq.l #8, d7
+  sub.w vbl_count.l, d7
+
+  moveq.l #15, d6
+.CopySlice:
+  move.w d7, d0
+  bpl.s .SkipPos.l
+  moveq.l #0, d0
+.SkipPos:
+  cmpi.w #8, d0
+  ble.s .SkipSmall.l
+  moveq.l #8, d0
+.SkipSmall:
+
+  move.l d0, d5
+  bra.s .SkipLineLoop.l
+.SkipLine:
+  moveq.l #0, d1
+  .rept 32
+  move.l d1, (a1)+
+  .endr
+  lea.l 32(a1), a1
+.SkipLineLoop:
+  dbra.w d5, .SkipLine.l
+
+  moveq.l #8, d5
+  sub.w d0, d5
+  bra.s .CopyLineLoop.l
+.CopyLine:
+  .rept 32
+  move.l (a0)+, (a1)+
+  .endr
+  lea.l 32(a1), a1
+.CopyLineLoop:
+  dbra.w d5, .CopyLine.l
+
+  lsl.w #7, d0
+  adda.w d0, a0
+  addq.w #1, d7
+
+  dbra.w d6, .CopySlice.l
+
+  move.l gfx_fb_front.l, d0
+  move.l gfx_fb_back.l, gfx_fb_front.l
+  move.l d0, gfx_fb_back.l
+  lsr.w #8, d0
+  move.b d0, GFX_VBASE_MID.w
+  swap d0
+  move.b d0, GFX_VBASE_HIGH.w
+
   stop #$2300
   cmp.b #$39, $fffffc02.w
   bne.s .KeepGoing.l
   moveq.l #1, d0
   rts
 .KeepGoing:
-  dbra.w d7, .Wait.l
+  cmp.w #INTRO_DURATION, vbl_count.l
+  bne.w IntroLoop.l
 
   moveq.l #0, d0
   rts
