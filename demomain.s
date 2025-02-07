@@ -331,6 +331,46 @@ CopyLine:
   dbra.w d7, .TimeLine2.l
 .endif
 
+.if STUB_SCROLLTEXT
+  lea.l DemoStart.l, a0
+  movea.l gfx_fb_back.l, a1
+  lea.l 160*168(a1), a2
+  lea.l 160*136(a1), a1
+  moveq.l #63, d7
+.TextHalfLine:
+  movem.l (a0)+, d0-d6/a4-a6
+  move.l d0, (a1)
+  move.l d0, (a2)
+  move.l d1, 8(a1)
+  move.l d1, 8(a2)
+  move.l d2, 16(a1)
+  move.l d2, 16(a2)
+  move.l d3, 24(a1)
+  move.l d3, 24(a2)
+  move.l d4, 32(a1)
+  move.l d4, 32(a2)
+  move.l d5, 40(a1)
+  move.l d5, 40(a2)
+  move.l d6, 48(a1)
+  move.l d6, 48(a2)
+  move.l a4, 56(a1)
+  move.l a4, 56(a2)
+  move.l a5, 64(a1)
+  move.l a5, 64(a2)
+  move.l a6, 72(a1)
+  move.l a6, 72(a2)
+  lea.l 80(a1), a1
+  lea.l 80(a2), a2
+  dbra.w d7, .TextHalfLine.l
+.endif
+
+.if ANIM_TIMING_BARS
+  moveq.l #17, d7
+.TimeLine3:
+  not.w $ffff8240.w
+  dbra.w d7, .TimeLine3.l
+.endif
+
   cmp.b #$39, $fffffc02.w
   bne.w MainLoop.l
 
