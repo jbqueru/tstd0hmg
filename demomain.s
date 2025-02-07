@@ -37,6 +37,7 @@ DemoStart:
 
   move.l #VmaxMusicStart, MusicPlay.l
   move.l #VBL, VECTOR_VBL.w
+  move.w #0, vbl_count.l
 
   bsr.w Intro
   tst.w d0
