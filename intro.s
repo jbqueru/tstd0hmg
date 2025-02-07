@@ -36,20 +36,32 @@
 
   .text
 Intro:
+  stop #$2300
+  movem.l IntroPalette.l, d0-d7
+  movem.l d0-d7, GFX_PALETTE.w
+
   lea.l IntroLogo.l, a0
   movea.l gfx_fb_front, a1
   movea.l gfx_fb_back, a2
-  lea.l 37*160(a1), a1
-  lea.l 37*160(a2), a2
-  move.w #40*126-1, d7
+  lea.l 16 + 30 * 160(a1), a1
+  lea.l 16 + 30 * 160(a2), a2
+  move.w #126 - 1, d7
 .CopyLogo:
-  move.l (a0)+, d0
-  move.l d0, (a1)+
-  move.l d0, (a2)+
+  movem.l (a0)+, d0-d6/a6
+  movem.l d0-d6/a6, (a1)
+  movem.l d0-d6/a6, (a2)
+  movem.l (a0)+, d0-d6/a6
+  movem.l d0-d6/a6, 32(a1)
+  movem.l d0-d6/a6, 32(a2)
+  movem.l (a0)+, d0-d6/a6
+  movem.l d0-d6/a6, 64(a1)
+  movem.l d0-d6/a6, 64(a2)
+  movem.l (a0)+, d0-d6/a6
+  movem.l d0-d6/a6, 96(a1)
+  movem.l d0-d6/a6, 96(a2)
+  lea.l 160(a1), a1
+  lea.l 160(a2), a2
   dbra.w d7, .CopyLogo.l
-
-  movem.l IntroPalette.l, d0-d7
-  movem.l d0-d7, GFX_PALETTE.w
 
   move.w #INTRO_DURATION, d7
 .Wait:
