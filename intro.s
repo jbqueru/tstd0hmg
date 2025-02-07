@@ -45,7 +45,7 @@ Intro:
   movea.l gfx_fb_back, a2
   lea.l 16 + 30 * 160(a1), a1
   lea.l 16 + 30 * 160(a2), a2
-  move.w #126 - 1, d7
+  moveq.l #127, d7
 .CopyLogo:
   movem.l (a0)+, d0-d6/a6
   movem.l d0-d6/a6, (a1)

@@ -151,9 +151,9 @@ void main() {
 		logo[i] = 0;
 	}
 
-	for (int y = 0; y < 126; y++) {
+	for (int y = 0; y < 128; y++) {
 		for (int x = 0; x < 256; x++) {
-			unsigned int c = rawpixels[x + 32][y + 30];
+			unsigned int c = rawpixels[x + 32][y + 29];
 			if (c & 1) {
 				logo[(x / 16) * 8 + (x & 8) / 8 + y * 128 + 0] |= (0x80 >> (x & 7));
 			}
@@ -170,7 +170,7 @@ void main() {
 	}
 
 	outputfile = fopen("out/inc/mb_bitmap.bin", "wb");
-	fwrite(logo, 1, 128* 126, outputfile);
+	fwrite(logo, 1, 128 * 128, outputfile);
 	fclose(outputfile);
 
 	outputfile = fopen("out/inc/mb_palette.bin", "wb");
