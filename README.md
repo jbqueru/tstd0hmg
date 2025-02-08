@@ -127,7 +127,37 @@ y
 Feb 05 2025: We've agreed that timing might be tight, so we'll aim for
 an initial release by the deadline, followed by a fuller one when we have
 time to polish it.
-
+Feb 06 2025:
+```
++--------------------+
++                    +
++                    +
++                    +
++                    +
++                    +
++                    +
++                    +
++                    +
++                    +
++                    +
++                    +
++                    +
++                    +
++                    +
++                    +
++                    +
++                    +
++                    +
++                    +
++                    +
++--------------------+
+```
+Feb 07 2025: We're aiming to have a variable-width font with kerning.
+We're discussing whether we could have multiple glyphs for some letters,
+to create a better continuity.
+Separately, we're discussing the possibility of making the 3D shapes
+bounce, and to have a delay between them.
+We're also planning to make the music longer.
 
 # What's in the package
 
