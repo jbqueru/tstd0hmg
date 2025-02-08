@@ -22,7 +22,7 @@
 ;
 ; SPDX-License-Identifier: AGPL-3.0-or-later
 
-; 8 patterns of 64 beats of 7 VBL = 3584 frames
+; 9 patterns of 64 beats of 7 VBL = 4032 frames
 
 	.68000
 	.text
@@ -40,7 +40,7 @@
 	move.w	d0, FileHandle
 
 	move.l	#RegDump, -(sp)
-	move.l	#3584 * 14, -(sp)
+	move.l	#9 * 64 * 7 * 14, -(sp)
 	move.w	FileHandle, -(sp)
 	move.w	#64, -(sp)
 	trap	#1
@@ -69,7 +69,7 @@ MainSup:
 	bsr	Music
 
 ; Music length:
-; 8 patterns 64 * 7
+; 9 patterns 64 * 7
 	move.w	#9 * 64 * 7 -1, d0
 	lea.l	RegDump, a0
 PlayMusic:
