@@ -63,7 +63,7 @@ IntroLoop:
   moveq.l #8, d0
 .SkipSmall:
 
-  move.l d0, d5
+  move.w d0, d5
   bra.s .SkipLineLoop.l
 .SkipLine:
   moveq.l #0, d1
@@ -85,30 +85,50 @@ IntroLoop:
 .CopyLineLoop:
   dbra.w d5, .CopyLine.l
 
-  lsl.w #7, d0
-  adda.w d0, a0
+  move.w d0, d5
+  lsl.w #7, d5
+  adda.w d5, a0
+
   addq.w #1, d7
 
   dbra.w d6, .CopySlice.l
 
+.if ANIM_TIMING_BARS
+  moveq.l #17, d7
+.TimeLine:
+  not.w $ffff8240.w
+  dbra.w d7, .TimeLine.l
+.endif
+
 IntroInDone:
 
-  cmp.w #INTRO_DURATION - 50, vbl_count.l
-  blt.s IntroOutNotYet.l
+  cmp.w #INTRO_DURATION - 40, vbl_count.l
+  blt.w IntroOutNotYet.l
 
   lea.l IntroLogo.l, a0
   movea.l gfx_fb_back, a1
   lea.l 16 + 30 * 160(a1), a1
 
-  move.w #INTRO_DURATION, d7
+  move.w #INTRO_DURATION - 16, d7
   sub.w vbl_count.l, d7
 
   moveq.l #15, d6
 .CopySlice:
-
-
+  move.w d7, d0
+  bpl.s .SkipPos.l
+  moveq.l #0, d0
+.SkipPos:
+  cmpi.w #8, d0
+  ble.s .SkipSmall.l
+  moveq.l #8, d0
+.SkipSmall:
 
   moveq.l #8, d5
+  sub.w d0, d5
+  lsl.w #7, d5
+  adda.w d5, a0
+
+  move.w d0, d5
   bra.s .CopyLineLoop.l
 .CopyLine:
   .rept 32
@@ -118,10 +138,28 @@ IntroInDone:
 .CopyLineLoop:
   dbra.w d5, .CopyLine.l
 
+  moveq.l #8, d5
+  sub.w d0, d5
+  bra.s .SkipLineLoop.l
+.SkipLine:
+  moveq.l #0, d1
+  .rept 32
+  move.l d1, (a1)+
+  .endr
+  lea.l 32(a1), a1
+.SkipLineLoop:
+  dbra.w d5, .SkipLine.l
 
-
-
+  addq.w #1, d7
   dbra.w d6, .CopySlice.l
+
+.if ANIM_TIMING_BARS
+  moveq.l #17, d7
+.TimeLine:
+  not.w $ffff8240.w
+  dbra.w d7, .TimeLine.l
+.endif
+
 
 IntroOutNotYet:
 
