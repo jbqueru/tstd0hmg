@@ -177,4 +177,69 @@ void main() {
 	fwrite(pi1 + 2, 2, 16, outputfile);
 	fclose(outputfile);
 
+	inputfile = fopen("FNT.PI1", "rb");
+	fread(pi1, 1, 32034, inputfile);
+	fclose(inputfile);
+
+	for (int y = 0; y < 200; y++) {
+		for (int x = 0; x < 320; x++) {
+			int byteoffset = 34;
+			byteoffset += (x / 16) * 8;
+			byteoffset += (x / 8) % 2;
+			byteoffset += y * 160;
+
+			int bitoffset = 7 - (x % 8);
+
+			rawpixels[x][y] =
+				(((pi1[byteoffset] >> bitoffset) & 1)) +
+				(((pi1[byteoffset + 2] >> bitoffset) & 1) * 2) +
+				(((pi1[byteoffset + 4] >> bitoffset) & 1) * 4) +
+				(((pi1[byteoffset + 6] >> bitoffset) & 1) * 8);
+		}
+	}
+
+	int ystart = -1;
+	for (int y = 0; y <= 150; y++) {
+		int empty = 1;
+		if (y != 200) {
+			for (int x = 0 ; x < 320; x++) {
+				if (rawpixels[x][y]) {
+					empty = 0;
+					break;
+				}
+			}
+		}
+		if (empty) {
+			if (ystart != -1) {
+				printf("row from %d to %d\n", ystart, y - 1);
+				int xstart = -1;
+				for (int x = 0; x <= 320; x++) {
+					empty = 1;
+					if (x != 320) {
+						for (int yy = ystart; yy < y; yy++) {
+							if (rawpixels[x][yy]) {
+								empty = 0;
+								break;
+							}
+						}
+					}
+					if (empty) {
+						if (xstart != -1) {
+							printf("character from %d to %d\n", xstart, x - 1);
+							xstart = -1;
+						}
+					} else {
+						if (xstart == -1) {
+							xstart = x;
+						}
+					}
+				}
+				ystart = -1;
+			}
+		} else {
+			if (ystart == -1) {
+				ystart = y;
+			}
+		}
+	}
 }
