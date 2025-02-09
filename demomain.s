@@ -45,11 +45,19 @@ DemoStart:
   rts
 .DoAnim:
 
-  move.l #AnimXY, XYRead.l
+; ###################
+; ###################
+; ##               ##
+; ##   Draw Logo   ##
+; ##               ##
+; ###################
+; ###################
 
   lea.l VmaxLogo.l, a0
   movea.l gfx_fb_front, a1
+  lea.l 34*160(a1), a1
   movea.l gfx_fb_back, a2
+  lea.l 34*160(a2), a2
   move.w #20*131-1, d7
 FillScreen:
   movem.w (a0)+, d0-d2
@@ -70,6 +78,9 @@ FillScreen:
   move.l d4, d6
   move.l d4, d7
   movem.l d0-d7, $ffff8240.w
+
+  move.l #AnimXY, XYRead.l
+
 
 MainLoop:
 ; Wait for VBL
@@ -324,8 +335,7 @@ CopyLine:
 .if STUB_SCROLLTEXT
   lea.l DemoStart.l, a0
   movea.l gfx_fb_back.l, a1
-  lea.l 160*168(a1), a2
-  lea.l 160*136(a1), a1
+  lea.l 160 * 167(a1), a2
   moveq.l #63, d7
 .TextHalfLine:
   movem.l (a0)+, d0-d6/a4-a6
