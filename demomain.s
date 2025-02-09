@@ -72,13 +72,20 @@ FillScreen:
   move.w d0, (a1)+
   move.w d1, (a1)+
   move.w d2, (a1)+
-  clr.w (a1)+
+  addq.l #2, a1
   move.w d0, (a2)+
   move.w d1, (a2)+
   move.w d2, (a2)+
-  clr.w (a2)+
+  addq.l #2, a2
   dbra.w d7, FillScreen.l
 
+; #####################
+; #####################
+; ##                 ##
+; ##   Set Palette   ##
+; ##                 ##
+; #####################
+; #####################
 
   movem.l VmaxPalette.l, d0-d3
   move.l #ANIM_COLOR * $10001, d4
@@ -86,6 +93,14 @@ FillScreen:
   move.l d4, d6
   move.l d4, d7
   movem.l d0-d7, $ffff8240.w
+
+; ##############################
+; ##############################
+; ##                          ##
+; ##   Initialize animation   ##
+; ##                          ##
+; ##############################
+; ##############################
 
   move.l #AnimXY, XYRead.l
 
