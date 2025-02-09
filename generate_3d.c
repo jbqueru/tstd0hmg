@@ -1122,7 +1122,7 @@ void outputline(FILE* outputfile, int first, int x1, int y1, int x2, int y2) {
 	o = y1 * 6 + x1 / 16;
 	b = 15 - (x1 % 16);
 	i = 0;
-	s = 128;
+	s = 127;
 	if ((x1 == x2) && (y1 == y2)) {
 		l = 0;
 		d = 0;
@@ -1153,11 +1153,10 @@ void outputline(FILE* outputfile, int first, int x1, int y1, int x2, int y2) {
 		i = 255;
 	}
 	fprintf(outputfile, "; (%d,%d)-(%d,%d)\n", x1, y1, x2, y2);
-	fprintf(outputfile, "; f=%d, l=%d, o=%d, v=%d, d=%d, b=%d, i=%d, s=%d\n", first, l, o, v, d, b, i, s);
-	fprintf(outputfile, "  .dc.b %d,%d,%d,%d,%d\n",
+	fprintf(outputfile, "; f=%d, l=%d, o=%d, v=%d, d=%d, b=%d, i=%d\n", first, l, o, v, d, b, i);
+	fprintf(outputfile, "  .dc.b %d,%d,%d,%d\n",
 		first * 128 + l,
 		(o / 256) * 64 + v * 32 + d * 16 + b,
 		o % 256,
-		i,
-		s);
+		i);
 }

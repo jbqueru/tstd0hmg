@@ -187,7 +187,7 @@ LineVDown:
   adda.w d2, a0
 
   move.b (a6)+, d6
-  move.b (a6)+, d7
+  moveq.l #127, d7
 .NextLine:
   or.w d0, (a0)
   add.b d6, d7
@@ -218,7 +218,7 @@ LineVUp:
   adda.w d2, a0
 
   move.b (a6)+, d6
-  move.b (a6)+, d7
+  moveq.l #127, d7
 .NextLine:
   or.w d0, (a0)
   add.b d6, d7
@@ -253,7 +253,7 @@ LineHDown:
   adda.w d2, a0
 
   move.b (a6)+, d6
-  move.b (a6)+, d7
+  moveq.l #127, d7
 .NextLine:
   or.w d0, (a0)
   ror.w d0
@@ -285,7 +285,7 @@ LineHUp:
   adda.w d2, a0
 
   move.b (a6)+, d6
-  move.b (a6)+, d7
+  moveq.l #127, d7
 .NextLine:
   or.w d0, (a0)
   ror.w d0
