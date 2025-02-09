@@ -39,11 +39,19 @@ DemoStart:
   move.l #VBL, VECTOR_VBL.w
   move.w #0, vbl_count.l
 
+; ###########################################
+; ###########################################
+; ##                                       ##
+; ##   Invoke intro, bail if interrupted   ##
+; ##                                       ##
+; ###########################################
+; ###########################################
+
   bsr.w Intro
   tst.w d0
-  beq.s .DoAnim
+  beq.s .DoMainDemo
   rts
-.DoAnim:
+.DoMainDemo:
 
 ; ###################
 ; ###################
