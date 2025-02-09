@@ -182,6 +182,13 @@ IntroOutNotYet:
   cmp.w #INTRO_DURATION, vbl_count.l
   bne.w IntroLoop.l
 
+  move.w IntroPalette.l, d0
+  lea.l GFX_PALETTE.w, a0
+  moveq.l #15, d7
+.ErasePalette:
+  move.w d0, (a0)+
+  dbra.w d7, .ErasePalette.l
+
   moveq.l #0, d0
   rts
 
