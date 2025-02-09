@@ -62,17 +62,6 @@ FillScreen:
   move.w d2, (a2)+
   clr.w (a2)+
   dbra.w d7, FillScreen.l
-  move.w #20*68-1, d7
-ClearScreen:
-  clr.w (a1)+
-  clr.w (a1)+
-  clr.w (a1)+
-  clr.w (a1)+
-  clr.w (a2)+
-  clr.w (a2)+
-  clr.w (a2)+
-  clr.w (a2)+
-  dbra.w d7, ClearScreen.l
 
 
   movem.l VmaxPalette.l, d0-d3
