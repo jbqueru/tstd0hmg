@@ -34,6 +34,8 @@ unsigned char rawpixels[320][200];
 
 unsigned char logo[32000];
 
+int palettemap[8] = {0, 4, 1, 5, 2, 3, 6, 7};
+
 void main() {
 	FILE* inputfile;
 	FILE* outputfile;
@@ -52,10 +54,12 @@ void main() {
 			int bitoffset = 7 - (x % 8);
 
 			rawpixels[x][y] =
-				(((pi1[byteoffset] >> bitoffset) & 1)) +
-				(((pi1[byteoffset + 2] >> bitoffset) & 1) * 2) +
-				(((pi1[byteoffset + 4] >> bitoffset) & 1) * 4) +
-				(((pi1[byteoffset + 6] >> bitoffset) & 1) * 8);
+				palettemap[
+					(((pi1[byteoffset] >> bitoffset) & 1)) +
+					(((pi1[byteoffset + 2] >> bitoffset) & 1) * 2) +
+					(((pi1[byteoffset + 4] >> bitoffset) & 1) * 4) +
+					(((pi1[byteoffset + 6] >> bitoffset) & 1) * 8)
+				];
 		}
 	}
 
@@ -225,7 +229,8 @@ void main() {
 					}
 					if (empty) {
 						if (xstart != -1) {
-							printf("character from %d to %d\n", xstart, x - 1);
+							printf("character from %d to %d ", xstart, x - 1);
+							printf("(width %d adjusted width %d)\n", x - xstart, (x - xstart + 6) & 252);
 							xstart = -1;
 						}
 					} else {
