@@ -106,8 +106,18 @@ void main() {
 	fwrite(logo, 1, 120 * 131, outputfile);
 	fclose(outputfile);
 
+	unsigned char palette[16];
+	for (int i = 0; i < 8; i++) {
+		for (int j = 0; j < 8; j++) {
+			if (palettemap[j] == i) {
+				palette[2 * i] = pi1[2 * (j + 1)];
+				palette[2 * i + 1] = pi1[2 * (j + 1) + 1];
+			}
+		}
+	}
+
 	outputfile = fopen("out/inc/vmax_palette.bin", "wb");
-	fwrite(pi1 + 2, 2, 8, outputfile);
+	fwrite(palette, 2, 8, outputfile);
 	fclose(outputfile);
 
 	inputfile = fopen("MBVMAX.PI1", "rb");
