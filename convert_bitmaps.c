@@ -78,8 +78,9 @@ void main() {
 		}
 	}
 	if (xmin != 5 || xmax != 312 || ymin != 34 || ymax != 160) {
-		printf("Unexpected logo size (%d,%d)-(%d,%d) (expected (5,34)-(312,160))\n",
-			xmin, ymin, xmax, ymax);
+		fprintf(stderr, "Unexpected logo size (%d,%d)-(%d,%d) "
+				"(expected (5,34)-(312,160))\n",
+				xmin, ymin, xmax, ymax);
 		exit(1);
 	}
 
@@ -156,8 +157,9 @@ void main() {
 		}
 	}
 	if (xmin != 41 || xmax != 278 || ymin != 30 || ymax != 155) {
-		printf("Unexpected logo size (%d,%d)-(%d,%d) (expected (41,30)-(278,155))\n",
-			xmin, ymin, xmax, ymax);
+		fprintf(stderr, "Unexpected logo size (%d,%d)-(%d,%d) "
+				"(expected (41,30)-(278,155))\n",
+				xmin, ymin, xmax, ymax);
 		exit(1);
 	}
 
