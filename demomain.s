@@ -63,10 +63,10 @@ DemoStart:
 
   lea.l VmaxLogo.l, a0
   movea.l gfx_fb_front, a1
-  lea.l 34*160(a1), a1
+  lea.l 35*160(a1), a1
   movea.l gfx_fb_back, a2
-  lea.l 34*160(a2), a2
-  move.w #20*131-1, d7
+  lea.l 35*160(a2), a2
+  move.w #20*127-1, d7
 FillScreen:
   movem.w (a0)+, d0-d2
   move.w d0, (a1)+
