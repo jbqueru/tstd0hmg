@@ -34,6 +34,10 @@ unsigned char rawpixels[320][200];
 
 unsigned char logo[32000];
 
+const int numchars = 42;
+const int charheight = 33;
+const int charwidth = 40;
+
 int palettemap[8] = {0, 4, 1, 5, 2, 3, 6, 7};
 
 void main() {
@@ -206,15 +210,20 @@ void main() {
 
 			int bitoffset = 7 - (x % 8);
 
-			rawpixels[x][y] =
-				(((pi1[byteoffset] >> bitoffset) & 1)) +
-				(((pi1[byteoffset + 2] >> bitoffset) & 1) * 2) +
-				(((pi1[byteoffset + 4] >> bitoffset) & 1) * 4) +
-				(((pi1[byteoffset + 6] >> bitoffset) & 1) * 8);
+			rawpixels[x][y] = palettemap[
+					(((pi1[byteoffset] >> bitoffset) & 1)) +
+					(((pi1[byteoffset + 2] >> bitoffset) & 1) * 2) +
+					(((pi1[byteoffset + 4] >> bitoffset) & 1) * 4) +
+					(((pi1[byteoffset + 6] >> bitoffset) & 1) * 8)];
 		}
 	}
 
+	for (int i = 0; i < 32000; i++) {
+		logo[i] = 0;
+	}
+
 	int ystart = -1;
+	int foundchars = 0;
 	for (int y = 0; y <= 150; y++) {
 		int empty = 1;
 		if (y != 200) {
@@ -227,7 +236,12 @@ void main() {
 		}
 		if (empty) {
 			if (ystart != -1) {
-				printf("row from %d to %d\n", ystart, y - 1);
+				if (y - ystart > charheight) {
+					fprintf(stderr, "characters too tall "
+							"(found %d expected %d)\n",
+							y - ystart, charheight);
+					exit(1);
+				}
 				int xstart = -1;
 				for (int x = 0; x <= 320; x++) {
 					empty = 1;
@@ -241,8 +255,26 @@ void main() {
 					}
 					if (empty) {
 						if (xstart != -1) {
-							printf("character from %d to %d ", xstart, x - 1);
+							printf("character at %d,%d ", xstart, y - charheight);
 							printf("(width %d adjusted width %d)\n", x - xstart, (x - xstart + 6) & 252);
+							if (((x - xstart + 6) & 252) > charwidth) {
+								fprintf(stderr, "character at %d, %d too wide "
+										"found %d max %d\n",
+										x, y, (x - xstart + 6) & 252, charwidth);
+								exit(1);
+							}
+							for (int xc = 0; xc < x - xstart; xc++) {
+								for (int yc = 0; yc < charheight; yc++) {
+									unsigned char c = rawpixels[xstart + xc][y - charheight + yc];
+									if (c & 1) {
+										logo[foundchars * charwidth * charheight / 4 + yc * charwidth / 4 + xc / 4] |= 0x80 >> (xc & 3);
+									}
+									if (c & 2) {
+										logo[foundchars * charwidth * charheight / 4 + yc * charwidth / 4 + xc / 4] |= 0x08 >> (xc & 3);
+									}
+								}
+							}
+							foundchars++;
 							xstart = -1;
 						}
 					} else {
@@ -259,4 +291,9 @@ void main() {
 			}
 		}
 	}
+
+	outputfile = fopen("out/inc/font.bin", "wb");
+	fwrite(logo, 1, numchars * charwidth * charheight / 4, outputfile);
+	fclose(outputfile);
+
 }

@@ -79,6 +79,8 @@ FillScreen:
   addq.l #2, a2
   dbra.w d7, FillScreen.l
 
+
+
 ; #####################
 ; #####################
 ; ##                 ##
@@ -356,7 +358,7 @@ CopyLine:
 .endif
 
 .if STUB_SCROLLTEXT
-  lea.l DemoStart.l, a0
+  lea.l Font.l, a0
   movea.l gfx_fb_back.l, a1
   lea.l 160 * 167(a1), a2
   moveq.l #63, d7
@@ -425,6 +427,9 @@ VmaxLogo:
   .incbin "out/inc/vmax_bitmap.bin"
 VmaxPalette:
   .incbin "out/inc/vmax_palette.bin"
+
+Font:
+  .incbin "out/inc/font.bin"
 
 VmaxMusicStart:
   .incbin "AREGDUMP.BIN"
