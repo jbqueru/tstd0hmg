@@ -396,6 +396,10 @@ CopyLine:
   dbra.w d7, .TimeLine3.l
 .endif
 
+.if SPARE_TIME_COLOR
+  move.w #$770, $ffff8240.w
+.endif
+
   cmp.b #$39, $fffffc02.w
   bne.w MainLoop.l
 
@@ -404,6 +408,9 @@ CopyLine:
   rts
 
 VBL:
+.if SPARE_TIME_COLOR
+  move.w VmaxPalette.l, $ffff8240.w
+.endif
   movem.l d7/a0, -(sp)
   ; Play music
   movea.l MusicPlay.l, a0
