@@ -361,7 +361,7 @@ CopyLine:
   lea.l Font.l, a0
   movea.l gfx_fb_back.l, a1
   lea.l 160 * 167(a1), a2
-  moveq.l #63, d7
+  moveq.l #32, d7
 .TextHalfLine:
   movem.l (a0)+, d0-d6/a4-a6
   move.l d0, (a1)
@@ -384,8 +384,30 @@ CopyLine:
   move.l a5, 64(a2)
   move.l a6, 72(a1)
   move.l a6, 72(a2)
-  lea.l 80(a1), a1
-  lea.l 80(a2), a2
+  movem.l (a0)+, d0-d6/a4-a6
+  move.l d0, 80(a1)
+  move.l d0, 80(a2)
+  move.l d1, 88(a1)
+  move.l d1, 88(a2)
+  move.l d2, 96(a1)
+  move.l d2, 96(a2)
+  move.l d3, 104(a1)
+  move.l d3, 104(a2)
+  move.l d4, 112(a1)
+  move.l d4, 112(a2)
+  move.l d5, 120(a1)
+  move.l d5, 120(a2)
+  move.l d6, 128(a1)
+  move.l d6, 128(a2)
+  move.l a4, 136(a1)
+  move.l a4, 136(a2)
+  move.l a5, 144(a1)
+  move.l a5, 144(a2)
+  move.l a6, 152(a1)
+  move.l a6, 152(a2)
+  lea.l 400(a0), a0
+  lea.l 160(a1), a1
+  lea.l 160(a2), a2
   dbra.w d7, .TextHalfLine.l
 .endif
 
