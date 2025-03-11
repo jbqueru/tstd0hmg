@@ -27,6 +27,20 @@
   .text
 DemoStart:
 
+  lea.l Font.l, a0
+  lea.l ScrollBuffers.l, a1
+
+  moveq.l #19, d7
+UnpackOneColumn:
+  moveq.l #32, d6
+UnpackOneLine:
+  move.b (a0)+, d0
+  move.b d0, d1
+  lea.l 400(a1), a1
+  dbra.w d6, UnpackOneLine.l
+  lea.l -33 * 400 + 4(a1), a1
+  dbra.w d7, UnpackOneColumn.l
+
 ; ##############################
 ; ##############################
 ; ##                          ##
@@ -357,12 +371,12 @@ CopyLine:
   dbra.w d7, .TimeLine2.l
 .endif
 
-.if STUB_SCROLLTEXT
+.if STUB_SCROLLTEXT1
   lea.l Font.l, a0
   movea.l gfx_fb_back.l, a1
   lea.l 160 * 167(a1), a2
   moveq.l #32, d7
-.TextHalfLine:
+.TextCopyLine:
   movem.l (a0)+, d0-d6/a4-a6
   move.l d0, (a1)
   move.l d0, (a2)
@@ -408,7 +422,67 @@ CopyLine:
   lea.l 400(a0), a0
   lea.l 160(a1), a1
   lea.l 160(a2), a2
-  dbra.w d7, .TextHalfLine.l
+  dbra.w d7, .TextCopyLine.l
+.endif
+
+.if STUB_SCROLLTEXT2
+  lea.l Font.l, a0
+  movea.l gfx_fb_back.l, a1
+  moveq.l #19, d7
+.TextCopyColumn:
+  moveq.l #32, d6
+.TextCopyLine1:
+  move.b (a0)+, d0
+  move.b d0, d1
+  andi.b #$f0, d0
+  lsl.b #4, d1
+  move.b d0, (a1)
+  move.b d1, 2(a1)
+  move.b d0, 160 * 167(a2)
+  move.b d1, 160 * 167 + 2(a2)
+  lea 160(a1), a1
+  dbra.w d6, .TextCopyLine1.l
+  lea -160 * 33(a1), a1
+  moveq.l #32, d6
+.TextCopyLine2:
+  move.b (a0)+, d0
+  move.b d0, d1
+  lsr.b #4, d0
+  andi.b #$0f, d1
+  or.b d0, (a1)
+  or.b d1, 2(a1)
+  or.b d0, 160 * 167(a2)
+  or.b d1, 160 * 167 + 2(a2)
+  lea 160(a1), a1
+  dbra.w d6, .TextCopyLine2.l
+  lea -160 * 33(a1), a1
+  moveq.l #32, d6
+.TextCopyLine3:
+  move.b (a0)+, d0
+  move.b d0, d1
+  andi.b #$f0, d0
+  lsl.b #4, d1
+  move.b d0, 1(a1)
+  move.b d1, 3(a1)
+  move.b d0, 160 * 167 + 1(a2)
+  move.b d1, 160 * 167 + 3(a2)
+  lea 160(a1), a1
+  dbra.w d6, .TextCopyLine3.l
+  lea -160 * 33(a1), a1
+  moveq.l #32, d6
+.TextCopyLine4:
+  move.b (a0)+, d0
+  move.b d0, d1
+  lsr.b #4, d0
+  andi.b #$0f, d1
+  or.b d0, 1(a1)
+  or.b d1, 3(a1)
+  or.b d0, 160 * 167 + 1(a2)
+  or.b d1, 160 * 167 + 3(a2)
+  lea 160(a1), a1
+  dbra.w d6, .TextCopyLine4.l
+  lea -160 * 33 + 8(a1), a1
+  dbra.w d7, .TextCopyColumn.l
 .endif
 
 .if ANIM_TIMING_BARS
@@ -472,6 +546,9 @@ VmaxMusicRestart .equ VmaxMusicStart + 14 * 7 * 64 * 3
 LineBuffer:
   .ds.w 6*88
 LineBufferEnd:
+
+ScrollBuffers:
+  .ds.l 20 * 5 * 33
 
 XYRead:
   .ds.l 1
