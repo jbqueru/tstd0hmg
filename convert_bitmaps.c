@@ -267,10 +267,10 @@ void main() {
 								for (int yc = 0; yc < charheight; yc++) {
 									unsigned char c = rawpixels[xstart + xc][y - charheight + yc];
 									if (c & 1) {
-										logo[foundchars * charwidth * charheight / 4 + yc * charwidth / 4 + xc / 4] |= 0x80 >> (xc & 3);
+										logo[foundchars * charwidth * charheight / 4 + yc + xc / 4 * charheight] |= 0x80 >> (xc & 3);
 									}
 									if (c & 2) {
-										logo[foundchars * charwidth * charheight / 4 + yc * charwidth / 4 + xc / 4] |= 0x08 >> (xc & 3);
+										logo[foundchars * charwidth * charheight / 4 + yc + xc / 4 * charheight] |= 0x08 >> (xc & 3);
 									}
 								}
 							}
