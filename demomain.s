@@ -108,6 +108,9 @@ FillScreen:
   move.l #ScrollBuffers, ReadScroll.l
   move.l #Font, ReadFont1.l
   move.l #Font, ReadFont2.l
+  move.l #ScrollText, ReadText.l
+  move.b #1, ReadCol1.l
+  move.b #1, ReadCol2.l
 
 MainLoop:
 ; Wait for VBL
@@ -456,6 +459,25 @@ CopyLine:
   move.l a3, ReadFont1.l
   move.l a4, ReadFont2.l
 
+  subq.b #1, ReadCol1.l
+  bne.s .InChar
+  move.b #10, ReadCol1.l
+  movea.l ReadText.l, a0
+  moveq.l #0, d0
+  move.b (a0)+, d0
+  cmpa.l #EndScrollText, a0
+  bne.s .InText
+  lea.l ScrollText, a0
+.InText:
+  move.l a0, ReadText.l
+  lea.l AsciiConvert.l, a0
+  move.b -32(a0, d0.w), d0
+  mulu.w #330, d0
+  addi.l #Font, d0
+  move.l d0, ReadFont1.l
+  move.l d0, ReadFont2.l
+.InChar:
+
 .if ANIM_TIMING_BARS
   moveq.l #17, d7
 .TimeLine3:
@@ -513,6 +535,16 @@ VmaxMusicRestart .equ VmaxMusicStart + 14 * 7 * 64 * 3
 
   .include "out/inc/3d.inc"
 
+ScrollText:
+  .dc.b "HELLO, WORLD!           "
+EndScrollText:
+
+AsciiConvert:
+  .dc.b 0, 29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 31, 32, 27, 0
+  .dc.b 42, 33, 34, 35, 36, 37, 38, 39, 40, 41, 28, 0, 0, 0, 0, 30
+  .dc.b 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
+  .dc.b 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26
+
   .bss
   .even
 LineBuffer:
@@ -522,6 +554,8 @@ LineBufferEnd:
 ScrollBuffers:
   .ds.l 20 * 5 * 33
 
+ReadText:
+  .ds.l 1
 ReadScroll:
   .ds.l 1
 ReadFont1:
@@ -533,5 +567,10 @@ XYRead:
   .ds.l 1
 MusicPlay:
   .ds.l 1
+
+ReadCol1:
+  .ds.b 1
+ReadCol2:
+  .ds.b 1
 
   .include "intro.s"
