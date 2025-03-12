@@ -27,47 +27,6 @@
   .text
 DemoStart:
 
-  lea.l Font.l, a0
-  lea.l ScrollBuffers.l, a1
-
-  moveq.l #4, d7
-UnpackOneScreen:
-  moveq.l #19, d6
-UnpackOneColumn:
-  moveq.l #32, d5
-UnpackOneLine:
-  move.b (a0)+, d0
-  move.b d0, d1
-  andi.b #$f0, d0
-  lsl.b #4, d1
-  move.b d0, (a1)
-  move.b d1, 2(a1)
-  move.b 32(a0), d0
-  move.b d0, d1
-  lsr.b #4, d0
-  andi.b #$0f, d1
-  or.b d0, (a1)
-  or.b d1, 2(a1)
-  move.b 65(a0), d0
-  move.b d0, d1
-  andi.b #$f0, d0
-  lsl.b #4, d1
-  move.b d0, 1(a1)
-  move.b d1, 3(a1)
-  move.b 98(a0), d0
-  move.b d0, d1
-  lsr.b #4, d0
-  andi.b #$0f, d1
-  or.b d0, 1(a1)
-  or.b d1, 3(a1)
-  lea.l 400(a1), a1
-  dbra.w d5, UnpackOneLine.l
-  lea.l 33 * 3(a0), a0
-  lea.l -33 * 400 + 4(a1), a1
-  dbra.w d6, UnpackOneColumn.l
-  lea.l -33 * 79(a0), a0
-  dbra.w d7, UnpackOneScreen.l
-
 ; ##############################
 ; ##############################
 ; ##                          ##
