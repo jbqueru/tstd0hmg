@@ -30,9 +30,11 @@ DemoStart:
   lea.l Font.l, a0
   lea.l ScrollBuffers.l, a1
 
-  moveq.l #19, d7
+  moveq.l #4, d7
+UnpackOneScreen:
+  moveq.l #19, d6
 UnpackOneColumn:
-  moveq.l #32, d6
+  moveq.l #32, d5
 UnpackOneLine:
   move.b (a0)+, d0
   move.b d0, d1
@@ -59,10 +61,12 @@ UnpackOneLine:
   or.b d0, 1(a1)
   or.b d1, 3(a1)
   lea.l 400(a1), a1
-  dbra.w d6, UnpackOneLine.l
+  dbra.w d5, UnpackOneLine.l
   lea.l 33 * 3(a0), a0
   lea.l -33 * 400 + 4(a1), a1
-  dbra.w d7, UnpackOneColumn.l
+  dbra.w d6, UnpackOneColumn.l
+  lea.l -33 * 79(a0), a0
+  dbra.w d7, UnpackOneScreen.l
 
 ; ##############################
 ; ##############################
@@ -142,7 +146,7 @@ FillScreen:
 ; ##############################
 
   move.l #AnimXY, XYRead.l
-
+  move.l #ScrollBuffers, ReadScroll.l
 
 MainLoop:
 ; Wait for VBL
@@ -394,7 +398,7 @@ CopyLine:
   dbra.w d7, .TimeLine2.l
 .endif
 
-  lea.l ScrollBuffers.l, a0
+  movea.l ReadScroll.l, a0
   movea.l gfx_fb_back.l, a1
   lea.l 160 * 167(a1), a2
   moveq.l #32, d7
@@ -445,6 +449,14 @@ CopyLine:
   lea.l 160(a1), a1
   lea.l 160(a2), a2
   dbra.w d7, .TextCopyLine.l
+
+  movea.l ReadScroll.l, a0
+  lea.l 80(a0), a0
+  cmpa.l #ScrollBuffers + 320, a0
+  blt.s .InBuffer
+  lea.l -316(a0), a0
+.InBuffer:
+  move.l a0, ReadScroll.l
 
 .if ANIM_TIMING_BARS
   moveq.l #17, d7
@@ -510,6 +522,9 @@ LineBufferEnd:
 
 ScrollBuffers:
   .ds.l 20 * 5 * 33
+
+ReadScroll:
+  .ds.l 1
 
 XYRead:
   .ds.l 1
