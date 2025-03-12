@@ -36,8 +36,31 @@ UnpackOneColumn:
 UnpackOneLine:
   move.b (a0)+, d0
   move.b d0, d1
+  andi.b #$f0, d0
+  lsl.b #4, d1
+  move.b d0, (a1)
+  move.b d1, 2(a1)
+  move.b 32(a0), d0
+  move.b d0, d1
+  lsr.b #4, d0
+  andi.b #$0f, d1
+  or.b d0, (a1)
+  or.b d1, 2(a1)
+  move.b 65(a0), d0
+  move.b d0, d1
+  andi.b #$f0, d0
+  lsl.b #4, d1
+  move.b d0, 1(a1)
+  move.b d1, 3(a1)
+  move.b 98(a0), d0
+  move.b d0, d1
+  lsr.b #4, d0
+  andi.b #$0f, d1
+  or.b d0, 1(a1)
+  or.b d1, 3(a1)
   lea.l 400(a1), a1
   dbra.w d6, UnpackOneLine.l
+  lea.l 33 * 3(a0), a0
   lea.l -33 * 400 + 4(a1), a1
   dbra.w d7, UnpackOneColumn.l
 
@@ -372,7 +395,7 @@ CopyLine:
 .endif
 
 .if STUB_SCROLLTEXT1
-  lea.l Font.l, a0
+  lea.l ScrollBuffers.l, a0
   movea.l gfx_fb_back.l, a1
   lea.l 160 * 167(a1), a2
   moveq.l #32, d7
@@ -419,7 +442,7 @@ CopyLine:
   move.l a5, 144(a2)
   move.l a6, 152(a1)
   move.l a6, 152(a2)
-  lea.l 400(a0), a0
+  lea.l 320(a0), a0
   lea.l 160(a1), a1
   lea.l 160(a2), a2
   dbra.w d7, .TextCopyLine.l
