@@ -394,7 +394,6 @@ CopyLine:
   dbra.w d7, .TimeLine2.l
 .endif
 
-.if STUB_SCROLLTEXT1
   lea.l ScrollBuffers.l, a0
   movea.l gfx_fb_back.l, a1
   lea.l 160 * 167(a1), a2
@@ -446,67 +445,6 @@ CopyLine:
   lea.l 160(a1), a1
   lea.l 160(a2), a2
   dbra.w d7, .TextCopyLine.l
-.endif
-
-.if STUB_SCROLLTEXT2
-  lea.l Font.l, a0
-  movea.l gfx_fb_back.l, a1
-  moveq.l #19, d7
-.TextCopyColumn:
-  moveq.l #32, d6
-.TextCopyLine1:
-  move.b (a0)+, d0
-  move.b d0, d1
-  andi.b #$f0, d0
-  lsl.b #4, d1
-  move.b d0, (a1)
-  move.b d1, 2(a1)
-  move.b d0, 160 * 167(a2)
-  move.b d1, 160 * 167 + 2(a2)
-  lea 160(a1), a1
-  dbra.w d6, .TextCopyLine1.l
-  lea -160 * 33(a1), a1
-  moveq.l #32, d6
-.TextCopyLine2:
-  move.b (a0)+, d0
-  move.b d0, d1
-  lsr.b #4, d0
-  andi.b #$0f, d1
-  or.b d0, (a1)
-  or.b d1, 2(a1)
-  or.b d0, 160 * 167(a2)
-  or.b d1, 160 * 167 + 2(a2)
-  lea 160(a1), a1
-  dbra.w d6, .TextCopyLine2.l
-  lea -160 * 33(a1), a1
-  moveq.l #32, d6
-.TextCopyLine3:
-  move.b (a0)+, d0
-  move.b d0, d1
-  andi.b #$f0, d0
-  lsl.b #4, d1
-  move.b d0, 1(a1)
-  move.b d1, 3(a1)
-  move.b d0, 160 * 167 + 1(a2)
-  move.b d1, 160 * 167 + 3(a2)
-  lea 160(a1), a1
-  dbra.w d6, .TextCopyLine3.l
-  lea -160 * 33(a1), a1
-  moveq.l #32, d6
-.TextCopyLine4:
-  move.b (a0)+, d0
-  move.b d0, d1
-  lsr.b #4, d0
-  andi.b #$0f, d1
-  or.b d0, 1(a1)
-  or.b d1, 3(a1)
-  or.b d0, 160 * 167 + 1(a2)
-  or.b d1, 160 * 167 + 3(a2)
-  lea 160(a1), a1
-  dbra.w d6, .TextCopyLine4.l
-  lea -160 * 33 + 8(a1), a1
-  dbra.w d7, .TextCopyColumn.l
-.endif
 
 .if ANIM_TIMING_BARS
   moveq.l #17, d7
