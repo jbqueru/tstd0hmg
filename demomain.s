@@ -503,6 +503,7 @@ VmaxPalette:
   .incbin "out/inc/vmax_palette.bin"
 
 Font:
+  .dcb.b 330,0
   .incbin "out/inc/font.bin"
 
 VmaxMusicStart:
