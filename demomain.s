@@ -107,6 +107,7 @@ FillScreen:
   move.l #AnimXY, XYRead.l
   move.l #ScrollBuffers, ReadScroll.l
   move.l #Font, ReadFont1.l
+  move.l #Font, ReadFont2.l
 
 MainLoop:
 ; Wait for VBL
@@ -420,6 +421,7 @@ CopyLine:
   move.l a1, ReadScroll.l
 
   move.l ReadFont1.l, a3
+  move.l ReadFont2.l, a4
 
   lea 76(a0), a0
   lea 76(a1), a1
@@ -439,6 +441,12 @@ CopyLine:
   lsr.b #4, d3
   or.b d2, d0
   or.b d3, d1
+  move.b (a4)+, d2
+  move.b d2, d3
+  andi.b #$0f, d2
+  lsr.b #4, d3
+  or.b d2, d0
+  or.b d3, d1
   movem.w d0-d1, (a1)
   movem.w d0-d1, (a2)
   lea.l 400(a0), a0
@@ -446,6 +454,7 @@ CopyLine:
   lea.l 400(a2), a2
   dbra.w d7, .UpdateColumn.l
   move.l a3, ReadFont1.l
+  move.l a4, ReadFont2.l
 
 .if ANIM_TIMING_BARS
   moveq.l #17, d7
