@@ -426,7 +426,7 @@ CopyLine:
   movea.l a1, a2
   cmpa.l #ScrollBuffers + 320, a2
   blt.s .WriteInBuffer.l
-  lea.l -320(a2), a2
+  lea.l -316(a2), a2
 .WriteInBuffer:
   moveq.l #32, d7
 .UpdateColumn:
