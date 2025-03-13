@@ -541,7 +541,16 @@ VmaxMusicRestart .equ VmaxMusicStart + 14 * 7 * 64 * 3
   .include "out/inc/3d.inc"
 
 ScrollText:
-  .dc.b "HELLO, WORLD!           "
+  .dc.b "THE MEGABUSTERS ARE BACK WITH A BRAND NEW CRACK! "
+  .dc.b "WE ARE BRINGING YOU ANDROID FOR YOUR ATARI ST. "
+  .dc.b "MINIMUM REQUIREMENTS: 68040-68060 CPU AT 320MHZ, "
+  .dc.b "160MB OF RAM, 512MB OF HDD.      "
+  .dc.b "WHO BUILT THIS INTRO? GUEST MUSIC BY AD, GFX "
+  .dc.b "BY PFX, CODE BY DJB. "
+  .dc.b "ENJOY!!!!         "
+  .dc.b "RELEASED FOR THE FANTASY CRACKTRO CHALLENGE, "
+  .dc.b "16 MARCH 2025.       "
+  .dc.b "IN MEMORIAM, TST D0 FROM VMAX. R.I.P.       "
 EndScrollText:
 
 AsciiConvert:
