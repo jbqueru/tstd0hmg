@@ -459,9 +459,9 @@ CopyLine:
   move.l a3, ReadFont1.l
   move.l a4, ReadFont2.l
 
-  subq.b #1, ReadCol1.l
-  bne.s .InChar
-  move.b #10, ReadCol1.l
+  subq.b #4, ReadCol1.l
+  bgt.s .InChar
+  move.b #40, ReadCol1.l
   movea.l ReadText.l, a0
   moveq.l #0, d0
   move.b (a0)+, d0
