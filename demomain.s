@@ -461,7 +461,6 @@ CopyLine:
 
   subq.b #4, ReadCol1.l
   bgt.s .InChar
-  move.b #40, ReadCol1.l
   movea.l ReadText.l, a0
   moveq.l #0, d0
   move.b (a0)+, d0
@@ -472,6 +471,8 @@ CopyLine:
   move.l a0, ReadText.l
   lea.l AsciiConvert.l, a0
   move.b -32(a0, d0.w), d0
+  lea.l FontWidths.l, a0
+  move.b (a0, d0.w), ReadCol1.l
   mulu.w #330, d0
   addi.l #Font, d0
   move.l d0, ReadFont1.l
@@ -527,6 +528,10 @@ VmaxPalette:
 Font:
   .dcb.b 330,0
   .incbin "out/inc/font.bin"
+
+FontWidths:
+  .dc.b 16
+  .incbin "out/inc/widths.bin"
 
 VmaxMusicStart:
   .incbin "AREGDUMP.BIN"

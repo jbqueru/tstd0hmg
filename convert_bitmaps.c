@@ -38,6 +38,8 @@ const int numchars = 42;
 const int charheight = 33;
 const int charwidth = 40;
 
+unsigned char widths[42];
+
 int palettemap[8] = {0, 4, 1, 5, 2, 3, 6, 7};
 
 void main() {
@@ -255,7 +257,7 @@ void main() {
 					}
 					if (empty) {
 						if (xstart != -1) {
-							printf("character at %d,%d ", xstart, y - charheight);
+							printf("character %d at %d,%d ", foundchars, xstart, y - charheight);
 							printf("(width %d adjusted width %d)\n", x - xstart, (x - xstart + 6) & 252);
 							if (((x - xstart + 6) & 252) > charwidth) {
 								fprintf(stderr, "character at %d, %d too wide "
@@ -263,6 +265,7 @@ void main() {
 										x, y, (x - xstart + 6) & 252, charwidth);
 								exit(1);
 							}
+							widths[foundchars] = x - xstart + 1;
 							for (int xc = 0; xc < x - xstart; xc++) {
 								for (int yc = 0; yc < charheight; yc++) {
 									unsigned char c = rawpixels[xstart + xc][y - charheight + yc];
@@ -275,6 +278,10 @@ void main() {
 								}
 							}
 							foundchars++;
+							if (foundchars > numchars) {
+								fprintf(stderr, "found too many characters, found %d expected %d\n", foundchars, numchars);
+								exit(1);
+							}
 							xstart = -1;
 						}
 					} else {
@@ -292,8 +299,14 @@ void main() {
 		}
 	}
 
+	printf("found %d characters\n", foundchars);
+
 	outputfile = fopen("out/inc/font.bin", "wb");
-	fwrite(logo, 1, numchars * charwidth * charheight / 4, outputfile);
+	fwrite(logo, 1, foundchars * charwidth * charheight / 4, outputfile);
+	fclose(outputfile);
+
+	outputfile = fopen("out/inc/widths.bin", "wb");
+	fwrite(widths, 1, foundchars, outputfile);
 	fclose(outputfile);
 
 }
