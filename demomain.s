@@ -27,17 +27,7 @@
   .text
 DemoStart:
 
-; ##############################
-; ##############################
-; ##                          ##
-; ##   Music Initialization   ##
-; ##                          ##
-; ##############################
-; ##############################
-
-  move.l #VmaxMusicStart, MusicPlay.l
-  move.l #VBL, VECTOR_VBL.w
-  move.w #0, vbl_count.l
+  move.w VmaxPalette.l, $ffff8240.w
 
   lea.l Font.l, a0
   lea.l FontShift.l, a1
@@ -67,6 +57,17 @@ DemoStart:
   lea.l 33*430(a0), a1
   dbra.w d7, .ShiftPixel.l
 
+; ##############################
+; ##############################
+; ##                          ##
+; ##   Music Initialization   ##
+; ##                          ##
+; ##############################
+; ##############################
+
+  move.l #VmaxMusicStart, MusicPlay.l
+  move.l #VBL, VECTOR_VBL.w
+  move.w #0, vbl_count.l
 
 ; ###########################################
 ; ###########################################
