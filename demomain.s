@@ -492,13 +492,36 @@ CopyLine:
 ; We've consumed 4 pixels from the right character
   subq.b #4, ReadCol2.l
 
+  movea.l ReadText.l, a0
+  lea.l AsciiConvert.l, a1
+  moveq.l #0, d6
+
+  moveq.l #0, d0
+  moveq.l #0, d1
+  move.b (a0)+, d0		; ASCII value of left character
+  move.b -32(a1, d0.w), d0	; Font index of left character
+  subq.b #1, d0			; Remove non-printable characters
+  bmi.s .KernDone		; If non-printable, no kerning
+  move.b (a0)+, d1		; ASCII value of right character
+  move.b -32(a1, d1.w), d1	; Font index of right character
+  subq.b #1, d1			; Remove non-printable characters
+  bmi.s .KernDone		; If non-printable, no kerning
+  mulu.w #42, d0
+  add.w d0, d1
+  lea.l FontKernings, a0
+  move.b (a0, d1.w), d6		; d6 = number of overlapping pixels
+.KernDone:
+
 ; Check if there's room left to start another character
-  cmpi.b #3, ReadCol2.l
-  bgt.s .InChar2.l
+  moveq.l #3, d7
+  add.b d6, d7
+  cmp.b ReadCol2.l, d7
+  blt.s .InChar2.l
 
   movea.l ReadText.l, a0
+  addq.l #1, a0
   moveq.l #0, d0
-  move.b (a0)+, d0
+  move.b (a0), d0
   cmpa.l #EndScrollText, a0
   bne.s .InText.l
   lea.l ScrollText, a0
@@ -509,6 +532,7 @@ CopyLine:
   lea.l FontWidths.l, a0
   moveq.l #0, d1
   move.b ReadCol2.l, d1
+  andi.b #3, d1
   move.b (a0, d0.w), ReadCol2.l
   add.b d1, ReadCol2.l
   mulu.w #330, d0
@@ -585,6 +609,9 @@ FontWidths:
   .dc.b 16
   .incbin "out/inc/widths.bin"
 
+FontKernings:
+  .incbin "out/inc/kerning.bin"
+
 VmaxMusicStart:
   .incbin "AREGDUMP.BIN"
 VmaxMusicEnd:
@@ -593,6 +620,7 @@ VmaxMusicRestart .equ VmaxMusicStart + 14 * 7 * 64 * 3
   .include "out/inc/3d.inc"
 
 ScrollText:
+  .dc.b " "
   .dc.b "THE MEGABUSTERS ARE BACK WITH A BRAND NEW CRACK! "
   .dc.b "WE ARE BRINGING YOU ANDROID FOR THE ATARI ST. "
   .dc.b "MINIMUM REQUIREMENTS: 68040-68060 CPU AT 320MHZ, "
@@ -604,6 +632,7 @@ ScrollText:
   .dc.b "16 MARCH 2025.       "
   .dc.b "IN MEMORIAM, TST D0 FROM VMAX. R.I.P.       "
 EndScrollText:
+  .dc.b " "
 
 AsciiConvert:
   .dc.b 0, 29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 31, 32, 27, 0
