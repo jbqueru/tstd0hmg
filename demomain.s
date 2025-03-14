@@ -507,9 +507,20 @@ CopyLine:
   lea.l AsciiConvert.l, a0
   move.b -32(a0, d0.w), d0
   lea.l FontWidths.l, a0
+  moveq.l #0, d1
+  move.b ReadCol2.l, d1
   move.b (a0, d0.w), ReadCol2.l
+  add.b d1, ReadCol2.l
   mulu.w #330, d0
+  subq.b #1, d1
+  bmi.s .Unshifted.l
+  mulu.w #430 * 33, d1
+  add.l d1, d0
+  addi.l #FontShift, d0
+  bra.s .ShiftDone.l
+.Unshifted:
   addi.l #Font, d0
+.ShiftDone:
   move.l d0, ReadFont2.l
 .InChar2:
 
