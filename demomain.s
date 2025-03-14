@@ -357,7 +357,7 @@ LineDone:
 
   lea.l LineBuffer.l, a0
   movea.l gfx_fb_back.l, a1
-  lea.l 112*160+6(a1), a1
+  lea.l 56*160+6(a1), a1
   moveq.l #87, d7
 CopyLine:
   movem.w (a0)+, d0-d5
