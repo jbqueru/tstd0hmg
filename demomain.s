@@ -489,25 +489,36 @@ CopyLine:
   move.l a3, ReadFont1.l
   move.l a4, ReadFont2.l
 
-  subq.b #4, ReadCol1.l
-  bgt.s .InChar
+; We've consumed 4 pixels from the right character
+  subq.b #4, ReadCol2.l
+
+; Check if there's room left to start another character
+  cmpi.b #3, ReadCol2.l
+  bgt.s .InChar2.l
+
   movea.l ReadText.l, a0
   moveq.l #0, d0
   move.b (a0)+, d0
   cmpa.l #EndScrollText, a0
-  bne.s .InText
+  bne.s .InText.l
   lea.l ScrollText, a0
 .InText:
   move.l a0, ReadText.l
   lea.l AsciiConvert.l, a0
   move.b -32(a0, d0.w), d0
   lea.l FontWidths.l, a0
-  move.b (a0, d0.w), ReadCol1.l
+  move.b (a0, d0.w), ReadCol2.l
   mulu.w #330, d0
   addi.l #Font, d0
-  move.l d0, ReadFont1.l
   move.l d0, ReadFont2.l
-.InChar:
+.InChar2:
+
+  subq.b #4, ReadCol1.l
+  bgt.s .InChar1.l
+  move.b ReadCol2.l, ReadCol1.l
+  move.l ReadFont2.l, ReadFont1.l
+
+.InChar1:
 
 .if ANIM_TIMING_BARS
   moveq.l #17, d7
