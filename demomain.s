@@ -39,6 +39,35 @@ DemoStart:
   move.l #VBL, VECTOR_VBL.w
   move.w #0, vbl_count.l
 
+  lea.l Font.l, a0
+  lea.l FontShift.l, a1
+  moveq.l #2, d7
+.ShiftPixel:
+  moveq.l #32, d6
+  moveq.l #0, d2
+.ShiftRow:
+  move.w #429, d5
+.ShiftByte:
+  move.b (a0), d0
+  move.b d0, d1
+  andi.b #$ee, d0
+  lsr.b #1, d0
+  or.b d2, d0
+  move.b d0, (a1)
+  andi.b #$11, d1
+  lsl.b #3, d1
+  move.b d1, d2
+  lea.l 33(a0), a0
+  lea.l 33(a1), a1
+  dbra.w d5, .ShiftByte.l
+  lea.l -33*430+1(a0), a0
+  lea.l -33*430+1(a1), a1
+  dbra.w d6, .ShiftRow.l
+  lea.l -33(a1), a0
+  lea.l 33*430(a0), a1
+  dbra.w d7, .ShiftPixel.l
+
+
 ; ###########################################
 ; ###########################################
 ; ##                                       ##
@@ -586,5 +615,8 @@ ReadCol1:
   .ds.b 1
 ReadCol2:
   .ds.b 1
+
+FontShift:
+  .ds.b 33 * 10 * 43 * 3
 
   .include "intro.s"
