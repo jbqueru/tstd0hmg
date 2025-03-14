@@ -39,7 +39,7 @@ DEBUG		.equ	0
 STACK_SIZE	.equ	256		; in long words
 STACK_GUARD	.equ	$60C0FFEE
 
-ANIM_COLOR	.equ	$677
+ANIM_COLOR	.equ	$777
 
 
 .if DEBUG
