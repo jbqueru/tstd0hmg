@@ -38,7 +38,11 @@ const int numchars = 42;
 const int charheight = 33;
 const int charwidth = 40;
 
+unsigned int charx[42];
+unsigned int chary[42];
+
 unsigned char widths[42];
+unsigned char kern[42 * 42];
 
 int palettemap[8] = {0, 4, 1, 5, 2, 3, 6, 7};
 
@@ -257,8 +261,8 @@ void main() {
 					}
 					if (empty) {
 						if (xstart != -1) {
-							printf("character %d at %d,%d ", foundchars, xstart, y - charheight);
-							printf("(width %d adjusted width %d)\n", x - xstart, (x - xstart + 6) & 252);
+//							printf("character %d at %d,%d ", foundchars, xstart, y - charheight);
+//							printf("(width %d adjusted width %d)\n", x - xstart, (x - xstart + 6) & 252);
 							if (((x - xstart + 6) & 252) > charwidth) {
 								fprintf(stderr, "character at %d, %d too wide "
 										"found %d max %d\n",
@@ -266,6 +270,8 @@ void main() {
 								exit(1);
 							}
 							widths[foundchars] = x - xstart + 1;
+							charx[foundchars] = xstart;
+							chary[foundchars] = y - charheight;
 							for (int xc = 0; xc < x - xstart; xc++) {
 								for (int yc = 0; yc < charheight; yc++) {
 									unsigned char c = rawpixels[xstart + xc][y - charheight + yc];
@@ -299,7 +305,30 @@ void main() {
 		}
 	}
 
-	printf("found %d characters\n", foundchars);
+//	printf("found %d characters\n", foundchars);
+
+	for (int char1 = 0; char1 < foundchars; char1++) {
+		for (int char2 = 0; char2 < foundchars; char2++) {
+			kern[char1 + 42 * char2] = 255;
+			for (int y = 0; y < charheight; y++) {
+				int xl, xr;
+				for (xl = 0; xl < widths[char1] - 4; xl++) {
+					if (rawpixels[charx[char1] + widths[char1] - 2 - xl][y + chary[char1]]) break;
+					if (y > 0 && rawpixels[charx[char1] + widths[char1] - 2 - xl][y - 1 + chary[char1]]) break;
+					if (y < charheight - 1 && rawpixels[charx[char1] + widths[char1] - 2 - xl][y + 1 + chary[char1]]) break;
+				}
+//				printf("L char %d, y = %d, x = %d\n", char1, y, xl);
+				for (xr = 0; xr < widths[char2] - 4; xr++) {
+					if (rawpixels[charx[char2] + xr][y + chary[char2]]) break;
+				}
+//				printf("R char %d, y = %d, x = %d\n", char2, y, xr);
+				if (xl + xr < kern[char1 + 42 * char2]) {
+					kern[char1 + 42 * char2] = xl + xr;
+				}
+			}
+//			printf("kern %d-%d: %d\n", char1, char2, kern[char1 + 42 * char2]);
+		}
+	}
 
 	outputfile = fopen("out/inc/font.bin", "wb");
 	fwrite(logo, 1, foundchars * charwidth * charheight / 4, outputfile);
@@ -307,6 +336,10 @@ void main() {
 
 	outputfile = fopen("out/inc/widths.bin", "wb");
 	fwrite(widths, 1, foundchars, outputfile);
+	fclose(outputfile);
+
+	outputfile = fopen("out/inc/kerning.bin", "wb");
+	fwrite(kern, 1, foundchars * foundchars, outputfile);
 	fclose(outputfile);
 
 }
