@@ -312,13 +312,13 @@ void main() {
 			kern[42 * char1 + char2] = 255;
 			for (int y = 0; y < charheight; y++) {
 				int xl, xr;
-				for (xl = 0; xl < widths[char1] - 4; xl++) {
+				for (xl = 0; xl < widths[char1] - 6; xl++) {
 					if (rawpixels[charx[char1] + widths[char1] - 2 - xl][y + chary[char1]]) break;
 					if (y > 0 && rawpixels[charx[char1] + widths[char1] - 2 - xl][y - 1 + chary[char1]]) break;
 					if (y < charheight - 1 && rawpixels[charx[char1] + widths[char1] - 2 - xl][y + 1 + chary[char1]]) break;
 				}
 //				printf("L char %d, y = %d, x = %d\n", char1, y, xl);
-				for (xr = 0; xr < widths[char2] - 4; xr++) {
+				for (xr = 0; xr < widths[char2] - 6; xr++) {
 					if (rawpixels[charx[char2] + xr][y + chary[char2]]) break;
 				}
 //				printf("R char %d, y = %d, x = %d\n", char2, y, xr);
