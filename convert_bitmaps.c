@@ -309,7 +309,7 @@ void main() {
 
 	for (int char1 = 0; char1 < foundchars; char1++) {
 		for (int char2 = 0; char2 < foundchars; char2++) {
-			kern[char1 + 42 * char2] = 255;
+			kern[42 * char1 + char2] = 255;
 			for (int y = 0; y < charheight; y++) {
 				int xl, xr;
 				for (xl = 0; xl < widths[char1] - 4; xl++) {
@@ -322,11 +322,11 @@ void main() {
 					if (rawpixels[charx[char2] + xr][y + chary[char2]]) break;
 				}
 //				printf("R char %d, y = %d, x = %d\n", char2, y, xr);
-				if (xl + xr < kern[char1 + 42 * char2]) {
-					kern[char1 + 42 * char2] = xl + xr;
+				if (xl + xr < kern[42 * char1 + char2]) {
+					kern[42 * char1 + char2] = xl + xr;
 				}
 			}
-//			printf("kern %d-%d: %d\n", char1, char2, kern[char1 + 42 * char2]);
+//			printf("kern %d-%d: %d\n", char1, char2, kern[42 * char1 + char2]);
 		}
 	}
 
