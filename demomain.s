@@ -358,6 +358,8 @@ LineDone:
   lea.l LineBuffer.l, a0
   movea.l gfx_fb_back.l, a1
   lea.l 56*160+6(a1), a1
+  lea 56(a1), a2
+  lea 112(a1), a3
   moveq.l #87, d7
 CopyLine:
   movem.w (a0)+, d0-d5
@@ -368,21 +370,23 @@ CopyLine:
   move.w d4, 32(a1)
   move.w d5, 40(a1)
 
-  move.w d0, 56(a1)
-  move.w d1, 64(a1)
-  move.w d2, 72(a1)
-  move.w d3, 80(a1)
-  move.w d4, 88(a1)
-  move.w d5, 96(a1)
+  move.w d0, (a2)
+  move.w d1, 8(a2)
+  move.w d2, 16(a2)
+  move.w d3, 24(a2)
+  move.w d4, 32(a2)
+  move.w d5, 40(a2)
 
-  move.w d0, 112(a1)
-  move.w d1, 120(a1)
-  move.w d2, 128(a1)
-  move.w d3, 136(a1)
-  move.w d4, 144(a1)
-  move.w d5, 152(a1)
+  move.w d0, (a3)
+  move.w d1, 8(a3)
+  move.w d2, 16(a3)
+  move.w d3, 24(a3)
+  move.w d4, 32(a3)
+  move.w d5, 40(a3)
 
   lea.l 160(a1), a1
+  lea.l 160(a2), a2
+  lea.l 160(a3), a3
   dbra.w d7, CopyLine.l
 
 .if ANIM_TIMING_BARS
