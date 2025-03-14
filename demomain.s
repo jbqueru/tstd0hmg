@@ -532,6 +532,7 @@ CopyLine:
   lea.l FontWidths.l, a0
   moveq.l #0, d1
   move.b ReadCol2.l, d1
+  sub.b d6, d1
   andi.b #3, d1
   move.b (a0, d0.w), ReadCol2.l
   add.b d1, ReadCol2.l
