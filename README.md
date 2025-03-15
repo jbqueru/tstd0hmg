@@ -29,20 +29,20 @@ v2.6.0-devel with EmuTOS 1.3.
 
 # Timeline and design thoughts
 
-*Jan 13 2025:* announcement for a fake cracktro showcase in mid-March.
+**Jan 13 2025:** Announcement for a fake cracktro showcase in mid-March.
 
-*Jan 14 2025:* Pandafox and Djaybee agree to work on such a fake cracktro
+**Jan 14 2025:** Pandafox and Djaybee agree to work on such a fake cracktro
 and announce the MegaBuSTers' participation.
 
-*Jan 20-21 2025:* Pandafox suggests a remake of the VMax cracktro,
+**Jan 20-21 2025:** Pandafox suggests a remake of the VMax cracktro,
 possibly with enhancements as possible, ideally starting with
 something faithful to the original and progressively evolving into
 the enhanced version. Hints at the possibility of some distortion
 on the 3D cubes.
 
-*Jan 21 2025:* Pandafox proposes a redrawn logo.
+**Jan 21 2025:** Pandafox proposes a redrawn logo.
 
-*Jan 22 2025:* Djaybee explores the possibilities behind the 3D cubes.
+**Jan 22 2025:** Djaybee explores the possibilities behind the 3D cubes.
 Precomputing a long animation might take a lot of RAM (450kiB for 8
 seconds of 96*96*1bpp), while rendering it in real-time would limit
 the complexity and/or require optimizations that there might not be
@@ -50,13 +50,13 @@ enough time to develop. A hybrid solution could be possible, precomputing
 some of the frames and rendering the other frames on-demand (but
 in sub-real-time).
 
-*Jan 22 2025:* Djaybee sets up the baseline git project.
+**Jan 22 2025:** Djaybee sets up the baseline git project.
 
-*Jan 23 2025:* Technically, mode 0 pixels are skinny 59:64 in PAL,
+**Jan 23 2025:** Technically, mode 0 pixels are skinny 59:64 in PAL,
 which gives a hint about how large the 3D cubes need to be to have
 the proper aspect ratio on a real ST with a real TV.
 
-*Jan 25 2025:* Explorations in precomputing the 3D -> 2D coordinate
+**Jan 25 2025:** Explorations in precomputing the 3D -> 2D coordinate
 transforms. Those computations are easy to do in C with floating-point
 numbers. In a naive implementation, each line can be made to take
 4 bytes (xy coordinates 0-255). A plain cube without any decoration
@@ -73,14 +73,14 @@ the bit number takes 4 bits, there are 4 possible directions (2 bits).
 count, with one bit to spare to mark the end of the frame.
 That all fits in 4 bytes.
 
-*Jan 26 2025:* The line data mentioned yesterday is enough to draw
+**Jan 26 2025:** The line data mentioned yesterday is enough to draw
 lines aligned on exact pixels, but not for partial pixels, which
 would potentially result in smoother animation (i.e. sub-pixel
 precision for the line positioning). The initial partial pixel
 count for Bresenham might therefore need to be stored as well,
 which would be a 5th byte per line.
 
-*Feb 02 2025:* Moving toward a proper cube
+**Feb 02 2025:** Moving toward a proper cube
 ```
               4
     4+---------------+5
@@ -99,7 +99,7 @@ which would be a 5th byte per line.
 2+---------------+3
 ```
 
-*Feb 03 2025:* We're adding a startup logo.
+**Feb 03 2025:** We're adding a startup logo.
 
 Work toward a cuboctahedron:
 ```
@@ -137,11 +137,11 @@ y
 +------> x
 ```
 
-*Feb 05 2025:* We've agreed that timing might be tight, so we'll aim for
+**Feb 05 2025:** We've agreed that timing might be tight, so we'll aim for
 an initial release by the deadline, followed by a fuller one when we have
 time to polish it.
 
-*Feb 07 2025:* We're aiming to have a variable-width font with kerning.
+**Feb 07 2025:** We're aiming to have a variable-width font with kerning.
 We're discussing whether we could have multiple glyphs for some letters,
 to create a better continuity.
 
@@ -150,7 +150,7 @@ bounce, and to have a delay between them.
 
 We're also planning to make the music longer.
 
-*Mar 10-15 2025:* After leaving the project on ice for a month, the ideas
+**Mar 10-15 2025:** After leaving the project on ice for a month, the ideas
 we've had are implemented, in time for the deadline. The font has kerning,
 the 3D shapes bounce and have a time offset between them.
 
