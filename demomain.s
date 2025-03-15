@@ -144,12 +144,16 @@ FillScreen:
   move.l #StartCurve1, ReadCurve1.l
   move.l #StartCurve2, ReadCurve2.l
   move.l #StartCurve3, ReadCurve3.l
+  move.l #EndCurve1, WrapCurve1.l
+  move.l #EndCurve2, WrapCurve2.l
+  move.l #EndCurve3, WrapCurve3.l
   move.b #112, PrevCurve1.l
   move.b #112, PrevPrevCurve1.l
   move.b #112, PrevCurve2.l
   move.b #112, PrevPrevCurve2.l
   move.b #112, PrevCurve3.l
   move.b #112, PrevPrevCurve3.l
+  move.l #$7064d2b2, RandomCurve.l
 
 MainLoop:
 ; Wait for VBL
@@ -369,9 +373,26 @@ LineDone:
   movea.l ReadCurve1.l, a1
   moveq.l #0, d0
   move.b (a1)+, d0
-  cmpa.l #EndCurve3, a1
+  cmpa.l WrapCurve1, a1
   bne.s .InCurve1
+  move.l RandomCurve.l, d2
+  rol.l #5, d2
+  addi.l #$a3873268, d2
+  move.l d2, RandomCurve.l
+  btst.l #0, d2
+  bne.s .MidCurve1.l
+  btst.l #1, d2
+  bne.s .BigCurve1.l
+  lea.l StartCurve3, a1
+  move.l #EndCurve3, WrapCurve1.l
+  bra.s .InCurve1.l
+.BigCurve1:
   lea.l StartCurve1, a1
+  move.l #EndCurve1, WrapCurve1.l
+  bra.s .InCurve1.l
+.MidCurve1:
+  lea.l StartCurve2, a1
+  move.l #EndCurve2, WrapCurve1.l
 .InCurve1:
   move.l a1, ReadCurve1.l
 
@@ -444,10 +465,27 @@ LoopLineBottom1:
   movea.l ReadCurve2.l, a1
   moveq.l #0, d0
   move.b (a1)+, d0
-  cmpa.l #EndCurve3, a1
-  bne.s .InCurve1
+  cmpa.l WrapCurve2.l, a1
+  bne.s .InCurve2
+  move.l RandomCurve.l, d2
+  rol.l #5, d2
+  addi.l #$a3873268, d2
+  move.l d2, RandomCurve.l
+  btst.l #0, d2
+  bne.s .MidCurve2.l
+  btst.l #1, d2
+  bne.s .BigCurve2.l
+  lea.l StartCurve3, a1
+  move.l #EndCurve3, WrapCurve2.l
+  bra.s .InCurve2.l
+.BigCurve2:
   lea.l StartCurve1, a1
-.InCurve1:
+  move.l #EndCurve1, WrapCurve2.l
+  bra.s .InCurve2.l
+.MidCurve2:
+  lea.l StartCurve2, a1
+  move.l #EndCurve2, WrapCurve2.l
+.InCurve2:
   move.l a1, ReadCurve2.l
 
   moveq.l #0, d1
@@ -519,10 +557,27 @@ LoopLineBottom2:
   movea.l ReadCurve3.l, a1
   moveq.l #0, d0
   move.b (a1)+, d0
-  cmpa.l #EndCurve3, a1
-  bne.s .InCurve1
+  cmpa.l WrapCurve3.l, a1
+  bne.s .InCurve3
+  move.l RandomCurve.l, d2
+  rol.l #5, d2
+  addi.l #$a3873268, d2
+  move.l d2, RandomCurve.l
+  btst.l #0, d2
+  bne.s .MidCurve3.l
+  btst.l #1, d2
+  bne.s .BigCurve3.l
+  lea.l StartCurve3, a1
+  move.l #EndCurve3, WrapCurve3.l
+  bra.s .InCurve3.l
+.BigCurve3:
   lea.l StartCurve1, a1
-.InCurve1:
+  move.l #EndCurve1, WrapCurve3.l
+  bra.s .InCurve3.l
+.MidCurve3:
+  lea.l StartCurve2, a1
+  move.l #EndCurve2, WrapCurve3.l
+.InCurve3:
   move.l a1, ReadCurve3.l
 
   moveq.l #0, d1
@@ -903,6 +958,16 @@ ReadCurve1:
 ReadCurve2:
   .ds.l 1
 ReadCurve3:
+  .ds.l 1
+
+WrapCurve1:
+  .ds.l 1
+WrapCurve2:
+  .ds.l 1
+WrapCurve3:
+  .ds.l 1
+
+RandomCurve:
   .ds.l 1
 
 XYRead:
