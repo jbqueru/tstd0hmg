@@ -141,7 +141,9 @@ FillScreen:
   move.l #ScrollText, ReadText.l
   move.b #1, ReadCol1.l
   move.b #1, ReadCol2.l
-  move.l #StartCurve1, ReadCurve.l
+  move.l #StartCurve1, ReadCurve1.l
+  move.l #StartCurve2, ReadCurve2.l
+  move.l #StartCurve3, ReadCurve3.l
 
 MainLoop:
 ; Wait for VBL
@@ -356,21 +358,45 @@ LineDone:
   dbra.w d7, .TimeLine1.l
 .endif
 
-  movea.l ReadCurve.l, a0
-  moveq.l #0, d0
-  move.b (a0)+, d0
-  cmpa.l #EndCurve3, a0
-  bne.s .InCurve
-  lea.l StartCurve1, a0
-.InCurve:
-  move.l a0, ReadCurve.l
-
   lea.l LineBuffer.l, a0
   movea.l gfx_fb_back.l, a1
-  mulu.w #160, d0
-  lea.l 6(a1, d0.w), a1
+  addq.l #6, a1
   lea 56(a1), a2
   lea 112(a1), a3
+
+  movea.l ReadCurve1.l, a6
+  moveq.l #0, d0
+  move.b (a6)+, d0
+  cmpa.l #EndCurve3, a6
+  bne.s .InCurve1
+  lea.l StartCurve1, a6
+.InCurve1:
+  move.l a6, ReadCurve1.l
+  mulu.w #160, d0
+  adda.w d0, a1
+
+  movea.l ReadCurve2.l, a6
+  moveq.l #0, d0
+  move.b (a6)+, d0
+  cmpa.l #EndCurve3, a6
+  bne.s .InCurve2
+  lea.l StartCurve1, a6
+.InCurve2:
+  move.l a6, ReadCurve2.l
+  mulu.w #160, d0
+  adda.w d0, a2
+
+  movea.l ReadCurve3.l, a6
+  moveq.l #0, d0
+  move.b (a6)+, d0
+  cmpa.l #EndCurve3, a6
+  bne.s .InCurve3
+  lea.l StartCurve1, a6
+.InCurve3:
+  move.l a6, ReadCurve3.l
+  mulu.w #160, d0
+  adda.w d0, a3
+
   moveq.l #87, d7
 CopyLine:
   movem.w (a0)+, d0-d5
@@ -675,7 +701,11 @@ ReadFont1:
 ReadFont2:
   .ds.l 1
 
-ReadCurve:
+ReadCurve1:
+  .ds.l 1
+ReadCurve2:
+  .ds.l 1
+ReadCurve3:
   .ds.l 1
 
 XYRead:
