@@ -65,22 +65,26 @@ void main() {
 		"\n"
 	);
 
+	const int p1 = 61, p2 = 41, p3 = 31;
+	const int h = 112;
+	const double a = p1;
+
 	fprintf(outputfile, "StartCurve1:\n");
-	for (int i = -100; i < 99; i++) {
-		fprintf(outputfile, "  .dc.b %d\n", (int)(112*(i/100.0)*(i/100.0)));
+	for (int i = -p1; i < p1; i++) {
+		fprintf(outputfile, "  .dc.b %d\n", (int)(h*((i/a)*(i/a)+(1-(p1/a)*(p1/a)))));
 	}
 	fprintf(outputfile, "EndCurve1:\n");
 
 
 	fprintf(outputfile, "StartCurve2:\n");
-	for (int i = -79; i < 78; i++) {
-		fprintf(outputfile, "  .dc.b %d\n", (int)(112*((i/100.0)*(i/100.0)+(1-(79/100.0)*(79/100.0)))));
+	for (int i = -p2; i < p2; i++) {
+		fprintf(outputfile, "  .dc.b %d\n", (int)(h*((i/a)*(i/a)+(1-(p2/a)*(p2/a)))));
 	}
 	fprintf(outputfile, "EndCurve2:\n");
 
 	fprintf(outputfile, "StartCurve3:\n");
-	for (int i = -41; i < 40; i++) {
-		fprintf(outputfile, "  .dc.b %d\n", (int)(112*((i/100.0)*(i/100.0)+(1-(41/100.0)*(41/100.0)))));
+	for (int i = -p3; i < p3; i++) {
+		fprintf(outputfile, "  .dc.b %d\n", (int)(h*((i/a)*(i/a)+(1-(p3/a)*(p3/a)))));
 	}
 	fprintf(outputfile, "EndCurve3:\n");
 
