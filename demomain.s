@@ -365,49 +365,55 @@ LineDone:
 .endif
 
   lea.l LineBuffer.l, a0
-  movea.l gfx_fb_back.l, a1
-  addq.l #6, a1
-  lea 56(a1), a2
-  lea 112(a1), a3
 
-  movea.l ReadCurve1.l, a6
+  movea.l ReadCurve1.l, a1
   moveq.l #0, d0
-  move.b (a6)+, d0
-  cmpa.l #EndCurve3, a6
+  move.b (a1)+, d0
+  cmpa.l #EndCurve3, a1
   bne.s .InCurve1
-  lea.l StartCurve1, a6
+  lea.l StartCurve1, a1
 .InCurve1:
-  move.l a6, ReadCurve1.l
-  mulu.w #160, d0
-  adda.w d0, a1
+  move.l a1, ReadCurve1.l
 
-  movea.l ReadCurve2.l, a6
+  moveq.l #0, d1
+  move.b PrevPrevCurve1.l, d1
+  move.b PrevCurve1.l, PrevPrevCurve1.l
+  move.b d0, PrevCurve1.l
+  cmp.b d1, d0
+  blt.s .Curve1Up.l
+.Curve1Down:
+; from here, d0 >= d1, going down
+  move.l d0, d6
+  sub.b d1, d6
+  moveq.l #0, d7
+  move.b d1, d0
+  bra.s .Curve1Done.l
+.Curve1Up:
+; from here, d0 < d1, going up
+  moveq.l #0, d6
+  move.l d1, d7
+  sub.b d0, d7
+.Curve1Done:
+  mulu.w #160, d0
+  movea.l gfx_fb_back.l, a1
+  lea 6(a1, d0.w), a1
+
   moveq.l #0, d0
-  move.b (a6)+, d0
-  cmpa.l #EndCurve3, a6
-  bne.s .InCurve2
-  lea.l StartCurve1, a6
-.InCurve2:
-  move.l a6, ReadCurve2.l
-  mulu.w #160, d0
-  adda.w d0, a2
+  bra.s LoopLineTop1.l
+ClearLineTop1:
+  move.w d0, (a1)
+  move.w d0, 8(a1)
+  move.w d0, 16(a1)
+  move.w d0, 24(a1)
+  move.w d0, 32(a1)
+  move.w d0, 40(a1)
 
-  movea.l ReadCurve3.l, a6
-  moveq.l #0, d0
-  move.b (a6)+, d0
-  cmpa.l #EndCurve3, a6
-  bne.s .InCurve3
-  lea.l StartCurve1, a6
-.InCurve3:
-  move.l a6, ReadCurve3.l
-  mulu.w #160, d0
-  adda.w d0, a3
+  lea.l 160(a1), a1
+LoopLineTop1:
+  dbra.w d6, ClearLineTop1.l
 
-  movea.l a0, a4
-  movea.l a0, a5
-
-  moveq.l #87, d7
-CopyLine:
+  moveq.l #87, d6
+CopyLine1:
   movem.w (a0)+, d0-d5
   move.w d0, (a1)
   move.w d1, 8(a1)
@@ -416,26 +422,22 @@ CopyLine:
   move.w d4, 32(a1)
   move.w d5, 40(a1)
 
-  movem.w (a4)+, d0-d5
-  move.w d0, (a2)
-  move.w d1, 8(a2)
-  move.w d2, 16(a2)
-  move.w d3, 24(a2)
-  move.w d4, 32(a2)
-  move.w d5, 40(a2)
+  lea.l 160(a1), a1
+  dbra.w d6, CopyLine1.l
 
-  movem.w (a5)+, d0-d5
-  move.w d0, (a3)
-  move.w d1, 8(a3)
-  move.w d2, 16(a3)
-  move.w d3, 24(a3)
-  move.w d4, 32(a3)
-  move.w d5, 40(a3)
+  moveq.l #0, d0
+  bra.s LoopLineBottom1.l
+ClearLineBottom1:
+  move.w d0, (a1)
+  move.w d0, 8(a1)
+  move.w d0, 16(a1)
+  move.w d0, 24(a1)
+  move.w d0, 32(a1)
+  move.w d0, 40(a1)
 
   lea.l 160(a1), a1
-  lea.l 160(a2), a2
-  lea.l 160(a3), a3
-  dbra.w d7, CopyLine.l
+LoopLineBottom1:
+  dbra.w d7, ClearLineBottom1.l
 
 .if ANIM_TIMING_BARS
   moveq.l #17, d7
