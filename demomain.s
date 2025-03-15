@@ -397,6 +397,9 @@ LineDone:
   mulu.w #160, d0
   adda.w d0, a3
 
+  movea.l a0, a4
+  movea.l a0, a5
+
   moveq.l #87, d7
 CopyLine:
   movem.w (a0)+, d0-d5
@@ -407,6 +410,7 @@ CopyLine:
   move.w d4, 32(a1)
   move.w d5, 40(a1)
 
+  movem.w (a4)+, d0-d5
   move.w d0, (a2)
   move.w d1, 8(a2)
   move.w d2, 16(a2)
@@ -414,6 +418,7 @@ CopyLine:
   move.w d4, 32(a2)
   move.w d5, 40(a2)
 
+  movem.w (a5)+, d0-d5
   move.w d0, (a3)
   move.w d1, 8(a3)
   move.w d2, 16(a3)
