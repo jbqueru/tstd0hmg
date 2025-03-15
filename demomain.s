@@ -144,6 +144,12 @@ FillScreen:
   move.l #StartCurve1, ReadCurve1.l
   move.l #StartCurve2, ReadCurve2.l
   move.l #StartCurve3, ReadCurve3.l
+  move.b #112, PrevCurve1.l
+  move.b #112, PrevPrevCurve1.l
+  move.b #112, PrevCurve2.l
+  move.b #112, PrevPrevCurve2.l
+  move.b #112, PrevCurve3.l
+  move.b #112, PrevPrevCurve3.l
 
 MainLoop:
 ; Wait for VBL
@@ -721,6 +727,19 @@ MusicPlay:
 ReadCol1:
   .ds.b 1
 ReadCol2:
+  .ds.b 1
+
+PrevCurve1:
+  .ds.b 1
+PrevPrevCurve1:
+  .ds.b 1
+PrevCurve2:
+  .ds.b 1
+PrevPrevCurve2:
+  .ds.b 1
+PrevCurve3:
+  .ds.b 1
+PrevPrevCurve3:
   .ds.b 1
 
 FontShift:
