@@ -135,6 +135,7 @@ FillScreen:
 ; ##############################
 
   move.l #AnimXY, XYRead.l
+  move.l #LineBuffer, CurrentBuffer.l
   move.l #ScrollBuffers, ReadScroll.l
   move.l #Font, ReadFont1.l
   move.l #Font, ReadFont2.l
@@ -154,10 +155,16 @@ FillScreen:
   move.b #112, PrevCurve3.l
   move.b #112, PrevPrevCurve3.l
   move.l #$7064d2b2, RandomCurve.l
+  move.b #0, Display3D.l
 
 MainLoop:
 ; Wait for VBL
   stop #$2300
+
+  cmp.w #START_3D, vbl_count.l
+  bne.s .NotStart3D.l
+  move.b #1, Display3D.l
+.NotStart3D:
 
   move.l gfx_fb_front.l, d0
   move.l gfx_fb_back.l, gfx_fb_front.l
@@ -168,7 +175,15 @@ MainLoop:
   move.b d0, $ffff8201.w
 
 ; Clear offscreen buffer
-  lea.l LineBufferEnd.l, a6
+  movea.l CurrentBuffer.l, a6
+  lea.l 12*88(a6), a6
+  cmpa.l #EndLineBuffer, a6
+  bne.s .InBuffers.l
+  lea.l LineBuffer, a6
+.InBuffers:
+  move.l a6, CurrentBuffer.l
+  lea.l 12*88(a6), a6
+
   moveq.l #0, d0
   moveq.l #0, d1
   moveq.l #0, d2
@@ -233,7 +248,7 @@ LineVDown:
 ; multiply by 2 to get byte offset
   add.w d2, d2
 ; compute base address of drawing code
-  lea.l LineBuffer.l, a0
+  movea.l CurrentBuffer, a0
   adda.w d2, a0
 
   move.b (a6)+, d6
@@ -264,7 +279,7 @@ LineVUp:
 ; multiply by 2 to get byte offset
   add.w d2, d2
 ; compute base address of drawing code
-  lea.l LineBuffer.l, a0
+  movea.l CurrentBuffer.l, a0
   adda.w d2, a0
 
   move.b (a6)+, d6
@@ -299,7 +314,7 @@ LineHDown:
 ; multiply by 2 to get byte offset
   add.w d2, d2
 ; compute base address of drawing code
-  lea.l LineBuffer.l, a0
+  movea.l CurrentBuffer.l, a0
   adda.w d2, a0
 
   move.b (a6)+, d6
@@ -331,7 +346,7 @@ LineHUp:
 ; multiply by 2 to get byte offset
   add.w d2, d2
 ; compute base address of drawing code
-  lea.l LineBuffer.l, a0
+  movea.l CurrentBuffer.l, a0
   adda.w d2, a0
 
   move.b (a6)+, d6
@@ -368,7 +383,10 @@ LineDone:
   dbra.w d7, .TimeLine1.l
 .endif
 
-  lea.l LineBuffer.l, a0
+  tst.b Display3D.l
+  beq.w Skip3D.l
+
+  movea.l CurrentBuffer.l, a0
 
   movea.l ReadCurve1.l, a1
   moveq.l #0, d0
@@ -460,7 +478,12 @@ ClearLineBottom1:
 LoopLineBottom1:
   dbra.w d7, ClearLineBottom1.l
 
-  lea.l LineBuffer.l, a0
+  movea.l CurrentBuffer.l, a0
+  lea 12*88*26(a0), a0
+  cmpa.l #EndLineBuffer, a0
+  blt.s .InBuffer3
+  suba.l #12*88*51, a0
+.InBuffer3:
 
   movea.l ReadCurve2.l, a1
   moveq.l #0, d0
@@ -552,7 +575,12 @@ ClearLineBottom2:
 LoopLineBottom2:
   dbra.w d7, ClearLineBottom2.l
 
-  lea.l LineBuffer.l, a0
+  movea.l CurrentBuffer.l, a0
+  lea 12*88(a0), a0
+  cmpa.l #EndLineBuffer, a0
+  blt.s .InBuffer3
+  suba.l #12*88*51, a0
+.InBuffer3:
 
   movea.l ReadCurve3.l, a1
   moveq.l #0, d0
@@ -643,6 +671,8 @@ ClearLineBottom3:
   lea.l 160(a1), a1
 LoopLineBottom3:
   dbra.w d7, ClearLineBottom3.l
+
+Skip3D:
 
 .if ANIM_TIMING_BARS
   moveq.l #17, d7
@@ -938,8 +968,8 @@ AsciiConvert:
   .bss
   .even
 LineBuffer:
-  .ds.w 6*88
-LineBufferEnd:
+  .ds.w 6 * 88 * 51
+EndLineBuffer:
 
 ScrollBuffers:
   .ds.l 20 * 5 * 33
@@ -970,6 +1000,9 @@ WrapCurve3:
 RandomCurve:
   .ds.l 1
 
+CurrentBuffer:
+  .ds.l 1
+
 XYRead:
   .ds.l 1
 MusicPlay:
@@ -978,6 +1011,9 @@ MusicPlay:
 ReadCol1:
   .ds.b 1
 ReadCol2:
+  .ds.b 1
+
+Display3D:
   .ds.b 1
 
 PrevCurve1:
