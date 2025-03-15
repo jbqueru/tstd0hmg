@@ -70,8 +70,19 @@ void main() {
 		fprintf(outputfile, "  .dc.b %d\n", (int)(112*(i/100.0)*(i/100.0)));
 	}
 	fprintf(outputfile, "EndCurve1:\n");
+
+
 	fprintf(outputfile, "StartCurve2:\n");
+	for (int i = -79; i < 78; i++) {
+		fprintf(outputfile, "  .dc.b %d\n", (int)(112*((i/100.0)*(i/100.0)+(1-(79/100.0)*(79/100.0)))));
+	}
 	fprintf(outputfile, "EndCurve2:\n");
+
+	fprintf(outputfile, "StartCurve3:\n");
+	for (int i = -41; i < 40; i++) {
+		fprintf(outputfile, "  .dc.b %d\n", (int)(112*((i/100.0)*(i/100.0)+(1-(41/100.0)*(41/100.0)))));
+	}
+	fprintf(outputfile, "EndCurve3:\n");
 
 	fclose(outputfile);
 }

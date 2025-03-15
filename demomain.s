@@ -141,6 +141,7 @@ FillScreen:
   move.l #ScrollText, ReadText.l
   move.b #1, ReadCol1.l
   move.b #1, ReadCol2.l
+  move.l #StartCurve1, ReadCurve.l
 
 MainLoop:
 ; Wait for VBL
@@ -355,9 +356,19 @@ LineDone:
   dbra.w d7, .TimeLine1.l
 .endif
 
+  movea.l ReadCurve.l, a0
+  moveq.l #0, d0
+  move.b (a0)+, d0
+  cmpa.l #EndCurve3, a0
+  bne.s .InCurve
+  lea.l StartCurve1, a0
+.InCurve:
+  move.l a0, ReadCurve.l
+
   lea.l LineBuffer.l, a0
   movea.l gfx_fb_back.l, a1
-  lea.l 56*160+6(a1), a1
+  mulu.w #160, d0
+  lea.l 6(a1, d0.w), a1
   lea 56(a1), a2
   lea 112(a1), a3
   moveq.l #87, d7
@@ -623,6 +634,7 @@ VmaxMusicEnd:
 VmaxMusicRestart .equ VmaxMusicStart + 14 * 7 * 64 * 3
 
   .include "out/inc/3d.inc"
+  .include "out/inc/curves.inc"
 
 ScrollText:
   .dc.b " "
@@ -661,6 +673,9 @@ ReadScroll:
 ReadFont1:
   .ds.l 1
 ReadFont2:
+  .ds.l 1
+
+ReadCurve:
   .ds.l 1
 
 XYRead:
