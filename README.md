@@ -158,6 +158,9 @@ to create a better continuity.
 Separately, we're discussing the possibility of making the 3D shapes
 bounce, and to have a delay between them.
 We're also planning to make the music longer.
+Mar 10-15 2025: After leaving the project on ice for a month, the ideas
+we've had are implemented, in time for the deadline. The font has kerning,
+the 3D shapes bounce and have a time offset between them.
 
 # What's in the package
 
