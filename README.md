@@ -264,7 +264,7 @@ at work, economic situation, health, personal preferences,
 interests, reliability, behavior, location, and movements.
 
 _Don't use this code where GDPR might come into scope.
-Seriously. Don't. Just don't.
+Seriously. Don't. Just don't._
 
 ## Security
 
