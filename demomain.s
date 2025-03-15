@@ -27,25 +27,40 @@
   .text
 DemoStart:
 
-  move.w VmaxPalette.l, $ffff8240.w
+; #############################
+; #############################
+; ##                         ##
+; ##   Precompute graphics   ##
+; ##                         ##
+; #############################
+; #############################
 
-  lea.l Font.l, a0
-  lea.l FontShift.l, a1
-  moveq.l #2, d7
+; *************************
+; ** Set palette color 0 **
+; *************************
+  move.w VmaxPalette.l, GFX_COLOR0.w
+
+; ***********************************
+; ** Shift font to pixel positions **
+; ***********************************
+FontShift:
+  lea.l Font.l, a0	; source
+  lea.l font_shifted.l, a1	; destination
+  moveq.l #2, d7	; loop counter over shitfs (3 + original = 4)
 .ShiftPixel:
-  moveq.l #32, d6
-  moveq.l #0, d2
+  moveq.l #FONT_HEIGHT - 1, d6	; loop counter over lines
+  moveq.l #0, d2	; buffer for bits passed across columns
 .ShiftRow:
-  move.w #429, d5
+  move.w #FONT_WIDTH - 1, d5	; loop counter over columns
 .ShiftByte:
-  move.b (a0), d0
-  move.b d0, d1
-  andi.b #$ee, d0
-  lsr.b #1, d0
-  or.b d2, d0
-  move.b d0, (a1)
-  andi.b #$11, d1
-  lsl.b #3, d1
+  move.b (a0), d0	; read one byte
+  move.b d0, d1		; make a copy to remember the outgoing bits
+  andi.b #$ee, d0	; mask the bits that remain within this byte
+  lsr.b #1, d0		; shift 1 bit to the right
+  or.b d2, d0		; add the bits that came from the previous byte
+  move.b d0, (a1)	; store the byte
+  andi.b #$11, d1	; mask the bits for next byte
+  lsl.b #3, d1		; shift those bits into place
   move.b d1, d2
   lea.l 33(a0), a0
   lea.l 33(a1), a1
@@ -830,7 +845,7 @@ Skip3D:
   bmi.s .Unshifted.l
   mulu.w #430 * 33, d1
   add.l d1, d0
-  addi.l #FontShift, d0
+  addi.l #font_shifted, d0
   bra.s .ShiftDone.l
 .Unshifted:
   addi.l #Font, d0
@@ -1029,7 +1044,7 @@ PrevCurve3:
 PrevPrevCurve3:
   .ds.b 1
 
-FontShift:
+font_shifted:
   .ds.b 33 * 10 * 43 * 3
 
   .include "intro.s"

@@ -32,7 +32,7 @@
 ;
 ;	- Assembler directives are .lowercase with a leading period
 ;	- Mnemomics and registers are lowercase unless otherwise required
-;	- Symbols for code are CamelCase
+;	- Symbols for code and data are CamelCase
 ;	- Symbols for variables are snake_case
 ;	- Symbols for app-specific constants are ALL_CAPS
 ;	- Symbols for OS constants, hardware registers are ALL_CAPS
