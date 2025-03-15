@@ -154,6 +154,9 @@ We're also planning to make the music longer.
 we've had are implemented, in time for the deadline. The font has kerning,
 the 3D shapes bounce and have a time offset between them.
 
+**Mar 15 2025:** We officially submit our participation to the Fantasy
+Cracktro Showcase.
+
 # What's in the package
 
 The distribution package contains this `README.md` file, the main
