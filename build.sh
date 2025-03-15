@@ -36,6 +36,10 @@ echo '(*) generate coordinates for 3D graphics'
 cc generate_3d.c -lm -o out/bin/generate_3d || exit $?
 out/bin/generate_3d || exit $?
 
+echo '(*) generate animation curves'
+cc curves.c -lm -o out/bin/curves || exit $?
+out/bin/curves || exit $?
+
 echo '(*) assemble code'
 rmac -v -s -p -4 main.s -o out/tos/TSTD0HMG.PRG || exit $?
 
