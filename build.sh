@@ -21,6 +21,10 @@ mkdir -p out/bin || exit $?
 mkdir -p out/inc || exit $?
 mkdir -p out/tos/AUTO || exit $?
 
+echo '(*) convert text'
+cc convert_text.c -o out/bin/convert_text || exit $?
+out/bin/convert_text || exit $?
+
 echo '(*) convert bitmaps'
 cc convert_bitmaps.c -o out/bin/convert_bitmaps || exit $?
 out/bin/convert_bitmaps || exit $?

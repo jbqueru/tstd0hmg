@@ -17,22 +17,40 @@
 
 ; See main.s for more information
 
+; #############################################################################
+; #############################################################################
+; ####                                                                     ####
+; ####                                                                     ####
+; ####                             Scroll text                             ####
+; ####                                                                     ####
+; ####                                                                     ####
+; #############################################################################
+; #############################################################################
+
   .text
+
+; ########################################
+; ########################################
+; ##                                    ##
+; ##   Pre-compute scrolltext bitmaps   ##
+; ##                                    ##
+; ########################################
+; ########################################
+
 ScrollPrecompute:
 
 ; ***********************************
 ; ** Shift font to pixel positions **
 ; ***********************************
-FontShift:
   lea.l Font.l, a0	; source
   lea.l font_shifted.l, a1	; destination
   moveq.l #2, d7	; loop counter over shitfs (3 + original = 4)
-.FontShiftPixel:
+.ShiftPixel:
   moveq.l #FONT_HEIGHT - 1, d6	; loop counter over lines
   moveq.l #0, d2	; buffer for bits passed across columns
-.FontShiftRow:
+.ShiftRow:
   move.w #FONT_WIDTH - 1, d5	; loop counter over columns
-.FontShiftByte:
+.ShiftByte:
   move.b (a0), d0	; read one byte
   move.b d0, d1		; make a copy to remember the outgoing bits
   andi.b #$ee, d0	; mask the bits that remain within this byte
@@ -44,15 +62,23 @@ FontShift:
   move.b d1, d2		; store them for the next iteration
   lea.l FONT_HEIGHT(a0), a0	; move source to next column
   lea.l FONT_HEIGHT(a1), a1	; move destination to next column
-  dbra.w d5, .FontShiftByte.l	; iterate to next column
+  dbra.w d5, .ShiftByte.l	; iterate to next column
   lea.l -FONT_HEIGHT*FONT_WIDTH+1(a0), a0	; src: rewind columns, next row
   lea.l -FONT_HEIGHT*FONT_WIDTH+1(a1), a1	; dst: rewind columns, next row
-  dbra.w d6, .FontShiftRow.l	; iterate to next row
+  dbra.w d6, .ShiftRow.l	; iterate to next row
   lea.l -FONT_HEIGHT(a1), a0	; src for next iteration = start of current dst
   lea.l FONT_HEIGHT*FONT_WIDTH(a0), a1	; dst for next iteration = after src
-  dbra.w d7, .FontShiftPixel.l	; iterate to next pixel shift
+  dbra.w d7, .ShiftPixel.l	; iterate to next pixel shift
 
   rts
+
+; ##########################################
+; ##########################################
+; ##                                      ##
+; ##   Initialize scrolltext parameters   ##
+; ##                                      ##
+; ##########################################
+; ##########################################
 
 ScrollInit:
   move.l #ScrollBuffers, ReadScroll.l
@@ -63,6 +89,14 @@ ScrollInit:
   move.b #1, ReadCol2.l
 
   rts
+
+; #########################
+; #########################
+; ##                     ##
+; ##   Draw scrolltext   ##
+; ##                     ##
+; #########################
+; #########################
 
 ScrollDraw:
   movea.l ReadScroll.l, a0
@@ -166,17 +200,14 @@ ScrollDraw:
   subq.b #4, ReadCol2.l
 
   movea.l ReadText.l, a0
-  lea.l AsciiConvert.l, a1
   moveq.l #0, d6
 
   moveq.l #0, d0
   moveq.l #0, d1
-  move.b (a0)+, d0		; ASCII value of left character
-  move.b -32(a1, d0.w), d0	; Font index of left character
+  move.b (a0)+, d0		; left character index in font
   subq.b #1, d0			; Remove non-printable characters
   bmi.s .KernDone		; If non-printable, no kerning
-  move.b (a0)+, d1		; ASCII value of right character
-  move.b -32(a1, d1.w), d1	; Font index of right character
+  move.b (a0)+, d1		; right character index in font
   subq.b #1, d1			; Remove non-printable characters
   bmi.s .KernDone		; If non-printable, no kerning
   mulu.w #42, d0
@@ -200,8 +231,6 @@ ScrollDraw:
   lea.l ScrollText, a0
 .InText:
   move.l a0, ReadText.l
-  lea.l AsciiConvert.l, a0
-  move.b -32(a0, d0.w), d0
   lea.l FontWidths.l, a0
   moveq.l #0, d1
   move.b ReadCol2.l, d1
@@ -245,59 +274,9 @@ FontKernings:
 
 
 ScrollText:
-  .dc.b " "
-  .dc.b "ARE YOU READY? "
-  .dc.b "     "
-  .dc.b "THE MEGABUSTERS ARE BACK WITH A BRAND NEW CRACK! "
-  .dc.b "WE ARE BRINGING YOU ANDROID FOR THE ATARI ST!!!?! "
-  .dc.b "UNFORTUNATELY YOUR ST IS NOT POWERFUL ENOUGH: "
-  .dc.b "YOU NEED AT LEAST A 68040 OR 68060 CPU AT 333MHZ, "
-  .dc.b "160MB OF RAM, AND 500MB OF HDD. "
-  .dc.b "     "
-  .dc.b "GUEST MUSIC BY AD FROM MPS. GRAPHICS BY PANDAFOX FROM "
-  .dc.b "THE MEGABUSTERS, CODE BY DJAYBEE FROM THE MEGABUSTERS. "
-  .dc.b "     "
-  .dc.b "THIS INTRO IS DEDICATED TO THE INNER CHILD IN EACH OF US, "
-  .dc.b "THE ONE WHO DOES NOT WANT TO GROW UP, THE ONE WHO PREFERS "
-  .dc.b "TO PLAY GAMES WITHOUT A CARE IN THE WORLD, THE ONE WHO "
-  .dc.b "STILL CREATES DEMOS FOR A COMPUTER THAT BECAME OBSOLETE "
-  .dc.b "DECADES AGO. GIVE YOUR INNER CHILD SOME SPACE TO BREATHE! "
-  .dc.b "     "
-  .dc.b "ENJOY THE PIXEL-EXACT KERNING ON THE PROPORTIONAL FONT, "
-  .dc.b "ALONG WITH THE 3D CUBOCTAHEDRONS. "
-  .dc.b "     "
-  .dc.b "THIS INTRO WAS RELEASED FOR THE FANTASY CRACKTRO "
-  .dc.b "CHALLENGE, MARCH 16TH 2025. MAJOR THANKS TO THE "
-  .dc.b "ORGANIZERS FOR MAKING THIS HAPPEN. "
-  .dc.b "     "
-  .dc.b "THIS INTRO WAS INSPIRED BY THE CRACKTRO THAT VMAX HAD "
-  .dc.b "CREATED FOR TIP OFF. "
-  .dc.b "IN MEMORIAM, TST D0 FROM VMAX. R.I.P. "
-  .dc.b "     "
-  .dc.b "GREETINGS TO ALL OUR DEMO FRIENDS, ESPECIALLY MB, HMD, MPS. "
-  .dc.b "     "
-  .dc.b "GREETINGS ALSO TO DMA-SC, GUNSTICK, GWEM, TROED. "
-  .dc.b "     "
-  .dc.b "GREETINGS FINALLY TO ALL THE CRACKER GROUPS FROM BACK "
-  .dc.b "IN THE DAY, INCLUDING BUT NOT LIMITED TO: "
-  .dc.b "AWESOME, BEAT BOY, CORPO, CRAZY COYOTE, DERZETER, "
-  .dc.b "ELITE, FANATICS, FRA, FUZION, GOLIATH, HMD, HST, "
-  .dc.b "ICE, ICS, IKE, IMPACT, KELVIN, MGL, MJJ PROD, "
-  .dc.b "REBELLION, RCS, RED BARONS, ST-CNX, TAGGERS, "
-  .dc.b "THE REANIMATORS, TRIPLE H, V8, VMAX. "
-  .dc.b "     "
-  .dc.b "THIS DEMO IS LICENSED UNDER AGPL V3. YOU MAY ALSO "
-  .dc.b "USE THE ASSETS UNDER CC:BY-SA 4.0. "
-  .dc.b "     "
-  .dc.b "     "
+  .incbin "out/inc/text.bin"
 EndScrollText:
-  .dc.b " "
-
-AsciiConvert:
-  .dc.b 0, 29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 31, 32, 27, 0
-  .dc.b 42, 33, 34, 35, 36, 37, 38, 39, 40, 41, 28, 0, 0, 0, 0, 30
-  .dc.b 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
-  .dc.b 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26
+  .dc.b 0
 
   .bss
   .even
