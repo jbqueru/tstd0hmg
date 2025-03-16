@@ -22,7 +22,7 @@ mkdir -p out/inc || exit $?
 mkdir -p out/tos/AUTO || exit $?
 
 echo '(*) convert text'
-cc convert_text.c -o out/bin/convert_text || exit $?
+gcc convert_text.c -Wall -Wextra -o out/bin/convert_text || exit $?
 out/bin/convert_text || exit $?
 
 echo '(*) convert bitmaps'
