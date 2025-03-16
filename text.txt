@@ -1,45 +1,76 @@
 
-ARE YOU READY?
 
-THE MEGABUSTERS ARE BACK WITH A BRAND NEW CRACK!
-WE ARE BRINGING YOU ANDROID FOR THE ATARI ST!!!?!
-UNFORTUNATELY YOUR ST IS NOT POWERFUL ENOUGH:
-YOU NEED AT LEAST A 68040 OR 68060 CPU AT 333MHZ,
-160MB OF RAM, AND 500MB OF HDD.
 
-GUEST MUSIC BY AD FROM MPS. GRAPHICS BY PANDAFOX FROM
-THE MEGABUSTERS, CODE BY DJAYBEE FROM THE MEGABUSTERS.
 
-THIS INTRO IS DEDICATED TO THE INNER CHILD IN EACH OF US,
-THE ONE WHO DOES NOT WANT TO GROW UP, THE ONE WHO PREFERS
-TO PLAY GAMES WITHOUT A CARE IN THE WORLD, THE ONE WHO
-STILL CREATES DEMOS FOR A COMPUTER THAT BECAME OBSOLETE
-DECADES AGO. GIVE YOUR INNER CHILD SOME SPACE TO BREATHE!
 
-ENJOY THE PIXEL-EXACT KERNING ON THE PROPORTIONAL FONT,
-ALONG WITH THE 3D CUBOCTAHEDRONS.
 
-THIS INTRO WAS RELEASED FOR THE FANTASY CRACKTRO
-CHALLENGE, MARCH 16TH 2025. MAJOR THANKS TO THE
-ORGANIZERS FOR MAKING THIS HAPPEN.
 
-THIS INTRO WAS INSPIRED BY THE CRACKTRO THAT VMAX HAD
-CREATED FOR TIP OFF.
-IN MEMORIAM, TST D0 FROM VMAX. R.I.P.
 
-GREETINGS TO ALL OUR DEMO FRIENDS, ESPECIALLY MB, HMD, MPS.
 
-GREETINGS ALSO TO DMA-SC, GUNSTICK, GWEM, TROED.
 
-GREETINGS FINALLY TO ALL THE CRACKER GROUPS FROM BACK
-IN THE DAY, INCLUDING BUT NOT LIMITED TO:
+
+
+
+
+
+
+Are you ready?
+
+     The MegaBuSTers are back with a brand new crack!
+We are giving you Android for the Atari ST!!!?!
+Unfortunately your ST is not powerful enough: you need
+at least a 68040 or 68060 CPU at 333MHz, 160MB of RAM,
+and 500MB of HDD. Better luck next time, ha ha ha!
+
+     Guest music by AD from MPS. Graphics by Pandafox from
+the MegaBuSTers, code by Djaybee from the MegaBuSTers.
+
+     This intro is dedicated to the inner child in each of us,
+the one who does not want to grow up, the one who prefers
+playing games without a care in the world, the one who
+still creates demos for a computer that became obsolete
+decades ago. Give your inner child some breathing space!
+
+     Enjoy the pixel-exact kerning on the proportional font,
+along with the 3D cuboctahedrons.
+
+     This intro was released for the Fantasy Cracktro
+Challenge, March 16th 2025. Major thanks to the
+organizers for making it happen.
+
+     This intro was inspired by a cracktro that VMAX had
+created for some of their cracks, including Tip Off.
+In memoriam, TST D0 from VMAX. R.I.P.
+
+     Greetings to all our demo friends, especially MB, HMD, MPS.
+
+     Greetings also to DMA-SC, Gunstick, gwEm, Troed.
+
+     Greetings finally to all the cracker groups from
+back in the day, including but not limited to:
 AWESOME, BEAT BOY, CORPO, CRAZY COYOTE, DERZETER,
 ELITE, FANATICS, FRA, FUZION, GOLIATH, HMD, HST,
 ICE, ICS, IKE, IMPACT, KELVIN, MGL, MJJ PROD,
 REBELLION, RCS, RED BARONS, ST-CNX, TAGGERS,
 THE REANIMATORS, TRIPLE H, V8, VMAX.
 
-THIS DEMO IS LICENSED UNDER AGPL V3. YOU MAY ALSO
-USE THE ASSETS UNDER CC:BY-SA 4.0.
+     This demo is licensed under AGPL V3. You may also
+use the assets under CC:BY-SA 4.0.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
